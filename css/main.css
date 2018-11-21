@@ -1,0 +1,55 @@
+/* Generic */
+.hidden {
+	display: none;
+}
+.error-text {
+	color: red;
+}
+
+/* Card */
+.title {
+	font-size: 28px
+}
+
+/* Data Table */
+#dataTable,  #dataTable thead, #dataTable thead th{
+	border: 0px;
+}
+
+/* Menu */
+
+.main-menu .nav-item .nav-link{
+	padding-bottom: 4px;
+}
+.main-menu .nav-item .dropdown-menu{
+	border: none;
+	background-color: #212529;
+}
+.main-menu .nav-item .dropdown-menu .dropdown-item{
+	color: rgb(255,255,255, 0.5);
+}
+.main-menu .nav-item .dropdown-menu .dropdown-item:hover{
+	background-color: #212529;
+	color: rgb(255,255,255, 0.75);
+}
+.main-menu .nav-item .dropdown-menu .dropdown-item.selected{
+	background-color: #212529;
+	color: rgb(255,255,255, 0.65);
+}
+
+/* Custom Alert */
+
+#alert-yes-btn{
+	width: 48%;
+	margin-right: 2%
+}
+#alert-no-btn{
+	width: 48%;
+	margin-left: 2%
+}
+
+/* Form */
+
+.invalid{
+	border-color: red;
+}

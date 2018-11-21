@@ -1,0 +1,85 @@
+      
+
+        <div class="container-fluid">
+
+          
+
+          <!-- DataTables Example -->
+          <div class="card mb-3">
+            <div class="card-header">
+              <div class="row">
+                <div class="col-md-6 title">
+                  <li class="fas fa-dollar"></li>
+                  Minhas Vendas
+                </div>
+                <div class="col-md-6 text-right">
+                  <button type="button" class="btn btn-primary menu-btn menu-btn-cancel" data-content="table-responsive">Cancelar</button>
+                </div>
+              </div>
+              
+            </div>
+            <div class="card-body">
+              <div class="table-responsive tab-container">
+                <table class="table-bordered table-striped table-hover" id="dataTable" data-table="transactions" data-join="[><]users|user-id|id" data-filters=""  width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th data-field="date">Data</th>
+                      <th data-field="users.name">Comprador</th>
+                      <th data-field="value">Valor</th>
+                      <th data-field="comments">Parcelas</th>
+                      <th data-field="status">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+        
+
+        <!-- Scripts do módulo -->
+        <script>
+          var afterLoad = function(datatable){
+            $('tr td:nth-child(1)').each(function(){
+              var dateTime = $(this).html().split(' ');
+              var datePart = dateTime[0].split('-').reverse().join('/');
+              $(this).html(datePart + ' ' + dateTime[1]);
+            });
+
+            var status = {
+              1: "Aprovada",
+              2: "Cancelada"
+            };
+
+            $('tr td:nth-child(5)').each(function(){
+              $(this).html(status[$(this).html()]);
+            });
+
+            $('table tr').off('dblclick');
+
+            datatable.destroy()
+            $('#dataTable').DataTable({
+                "language": {
+                  "search": "Buscar: ",
+                  "lengthMenu": "Exibir _MENU_ registros por página",
+                  "zeroRecords": "Nenhum registro disponível",
+                  "info": "Exibindo _TOTAL_ registros",
+                  "infoEmpty": "Nenhum registro encontrado",
+                  "infoFiltered": "de _MAX_",
+                  "paginate": {
+                    "first":      '<<',
+                    "last":       '>>',
+                    "next":       '>',
+                    "previous":   '<'
+                  }
+                }
+              });
+          }
+        </script>
+        
