@@ -1,4 +1,4 @@
-$(function(){
+
   // notification(usertype);
   var home = '';
   
@@ -14,11 +14,6 @@ $(function(){
       break;
   }
 
-
-  $.get('modules/'+home+'/index.tpl', function(data){
-    $('#content-wrapper').html(data);
-  });
-
   var loadCustomMod = function(modules){
     $.get('modules/'+modules+'/index.tpl', function(html){
       $('#content-wrapper').fadeOut('fast', function(){
@@ -29,6 +24,10 @@ $(function(){
     });
     
   }
+
+  $.get('modules/'+home+'/index.tpl', function(data){
+    $('#content-wrapper').html(data);
+  });
 
   var loadModule = function(modules){
 
@@ -88,7 +87,7 @@ $(function(){
                    
                   for(l in fields){
                     // console.log(fields[l].replace(/-/g, "_").replace(".","__"));
-                    html += '<td>'+tdata[fields[l].replace(/-/g, "_").replace(".","__")]+'</td>';
+                    html += '<td><span name="'+fields[l]+'">'+tdata[fields[l].replace(/-/g, "_").replace(".","__")]+'</span></td>';
                   }
                   html += '</tr>';
                   $('tbody').append(html);
@@ -209,7 +208,7 @@ $(function(){
 
               customConfirm({
                 text: 'Deseja realmente excluir este registro?',
-                y: function(){
+                yesFunction: function(){
                   var id = $('#dataForm input[name=id]').val();
 
                   data = {
@@ -339,5 +338,3 @@ $(function(){
     }
 
   });
-
-});

@@ -73,7 +73,7 @@
           var screen = 1;
           $('.form-group.second').hide();
 
-          $('input[name=value]').mask('#.##0,00', {reverse: true});
+          $('input[name=value]').mask('###0,00', {reverse: true});
 
           $('.sale-btn-next').click(function(event){
             event.preventDefault(); 

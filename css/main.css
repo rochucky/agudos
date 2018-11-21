@@ -15,6 +15,9 @@
 #dataTable,  #dataTable thead, #dataTable thead th{
 	border: 0px;
 }
+#dataTable tr.selected{
+	background-color: #CCC
+}
 
 /* Menu */
 

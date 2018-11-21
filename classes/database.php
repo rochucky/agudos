@@ -14,7 +14,7 @@ class Database{
 		    'database_name' => 'agudos',
 		    'server' => 'localhost',
 		    'username' => 'root',
-		    'password' => 'eucs1234'
+		    'password' => ''
 		]);
 
 		$this->table = $table;
@@ -47,6 +47,10 @@ class Database{
 	}
 
 	public function insertData($data, $debug = false){
+
+		$data['created'] = date('Y-m-d H:i:s');
+		$data['created_by'] = $_SESSION['userid'];
+
 		if($debug){
 			echo "DEBUG: ";
 			echo $this->conn->debug()->insert($this->table, $data);	
@@ -58,6 +62,10 @@ class Database{
 	}
 
 	public function updateData($data, $id, $debug = false){
+
+		$data['updated'] = date('Y-m-d H:i:s');
+		$data['updated_by'] = $_SESSION['userid'];
+
 		if($debug){
 			echo "DEBUG: ";
 			echo $this->conn->debug()->update($this->table, $data, array('id' => $id));	

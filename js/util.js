@@ -103,6 +103,7 @@ var customAlert = function(param){
 		layout: 'center',
 		modal: true,
 		animation: notyAnimation,
+        closeWith: ['button'],
 		buttons: [
 		    Noty.button('OK', 'btn btn-primary btn-block', function () {
 		        alertModal.close();
@@ -110,7 +111,12 @@ var customAlert = function(param){
                     func();
                 }
 		    }, {id: 'alert-ok-btn', 'data-status': 'ok'})
-    	]
+    	],
+        callbacks: {
+            afterShow: function(){ // Estava zoando os botões
+                $('div[data-name=mojs-shape]').hide();
+            }
+        }
 	}).show();
 
 	$('#alert-ok-btn').focus();
@@ -118,24 +124,28 @@ var customAlert = function(param){
 
 var customConfirm = function(param){
 
-	var text = param.text;
-
 	var alertModal = new Noty({
 		theme: 'relax',
-		text: '<p class="text-center">' + text + '</p>',
+		text: '<p class="text-center">' + param.text + '</p>',
 		type: 'alert',
 		layout: 'center',
 		modal: true,
 		animation: notyAnimation,
+        closeWith: [''],
 		buttons: [
 		    Noty.button('Sim', 'btn btn-success', function(){
-		    	param.y();
+		    	param.yesFunction();
 		    	alertModal.close();
 		    }, {id: 'alert-yes-btn', 'data-status': 'yes'}),
 		    Noty.button('Não', 'btn btn-basic', function () {
 		        alertModal.close();
 		    }, {id: 'alert-no-btn', 'data-status': 'no'})
-    	]
+    	],
+        callbacks: {
+            afterShow: function(){ // Estava zoando os botões
+                $('div[data-name=mojs-shape]').hide();
+            }
+        }
 	}).show();
 
 	$('#alert-yes-btn').focus();

@@ -23,6 +23,7 @@
                 <table class="table-bordered table-striped table-hover" id="dataTable" data-table="transactions" data-join="[><]users|user-id|id" data-filters=""  width="100%" cellspacing="0">
                   <thead>
                     <tr>
+                      <th data-field="transactions.code">Código</th>
                       <th data-field="date">Data</th>
                       <th data-field="users.name">Comprador</th>
                       <th data-field="value">Valor</th>
@@ -46,7 +47,8 @@
         <!-- Scripts do módulo -->
         <script>
           var afterLoad = function(datatable){
-            $('tr td:nth-child(1)').each(function(){
+            datatable.destroy()
+            $('tr td:nth-child(2)').each(function(){
               var dateTime = $(this).html().split(' ');
               var datePart = dateTime[0].split('-').reverse().join('/');
               $(this).html(datePart + ' ' + dateTime[1]);
@@ -57,29 +59,65 @@
               2: "Cancelada"
             };
 
-            $('tr td:nth-child(5)').each(function(){
+            $('tr td:nth-child(6)').each(function(){
               $(this).html(status[$(this).html()]);
             });
 
             $('table tr').off('dblclick');
 
-            datatable.destroy()
-            $('#dataTable').DataTable({
-                "language": {
-                  "search": "Buscar: ",
-                  "lengthMenu": "Exibir _MENU_ registros por página",
-                  "zeroRecords": "Nenhum registro disponível",
-                  "info": "Exibindo _TOTAL_ registros",
-                  "infoEmpty": "Nenhum registro encontrado",
-                  "infoFiltered": "de _MAX_",
-                  "paginate": {
-                    "first":      '<<',
-                    "last":       '>>',
-                    "next":       '>',
-                    "previous":   '<'
-                  }
+            
+            datatable = $('#dataTable').DataTable({
+              "language": {
+                "search": "Buscar: ",
+                "lengthMenu": "Exibir _MENU_ registros por página",
+                "zeroRecords": "Nenhum registro disponível",
+                "info": "Exibindo _TOTAL_ registros",
+                "infoEmpty": "Nenhum registro encontrado",
+                "infoFiltered": "de _MAX_",
+                "paginate": {
+                  "first":      '<<',
+                  "last":       '>>',
+                  "next":       '>',
+                  "previous":   '<'
+                }
+              },
+              "select": true
+            });
+
+            $('.menu-btn-cancel').click(function(){
+              var rowId = datatable.rows( { selected: true } ).ids()[0];
+              var code = $('tr#'+rowId+' td span[name="transactions.code"]').html();
+              notification(code);
+              customConfirm({
+                text: "Deseja realmente cancelar esta transação?",
+                yesFunction: function(){
+
+                  var data = {
+                    "table": 'transactions',
+                    "filter": "code|"+code,
+                    "data": {
+                      "status": 2
+                    },
+                    "method": "saveData"
+                  };
+
+                  data = JSON.stringify(data);
+
+                  $.ajax({
+                    url: 'webservice.php',
+                    method: 'POST',
+                    datatype: 'json',
+                    data: {data: data},
+                    success: function(response){
+                      console.log(response);
+                      notification('Transação cancelada.');
+                      loadModule('vendas/listVendas');
+                    }
+                  });
                 }
               });
+            });
+
           }
         </script>
         

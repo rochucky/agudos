@@ -128,7 +128,7 @@ function saveData($data){
 		if(isset($_data['password'])){
 			unset($_data['password']);
 		}
-		$response = $table->updateData($_data, $id);	
+		$response = $table->updateData($_data, $id, true);	
 	}
 	
 	print(json_encode($response));
@@ -183,9 +183,10 @@ function makeSale($data){
 						'establishment_id' => $_SESSION['userid'],
 						'user_id' => $userData[0],
 						'value' => $data->value,
-						'date' => date('Y-m-d'),
+						'date' => date('Y-m-d H:i:s'),
 						'comments' => 'À Vista',
-						'status' => 1
+						'status' => 1,
+						'code' => date('YmdHis').$_SESSION['userid']
 					];
 
 					$response = $transactionTable->insertData($transactionData);
@@ -195,6 +196,7 @@ function makeSale($data){
 				else{
 					$count = 0;
 					$value = $data->value/$data->installments;
+					$code = date('YmdHis').$_SESSION['userid'];
 					do{
 						$transactionData = [
 							'establishment_id' => $_SESSION['userid'],
@@ -202,7 +204,8 @@ function makeSale($data){
 							'value' => $value,
 							'date' => date('Y-m-d', strtotime("+ ".$count. "months")),
 							'comments' => ($count+1).'/'.$data->installments,
-							'status' => 1
+							'status' => 1,
+							'code' => $code
 						];
 
 						$response = $transactionTable->insertData($transactionData);

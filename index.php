@@ -1,4 +1,6 @@
 <?php 
+date_default_timezone_set('America/Sao_Paulo');
+
 include('classes/functions.php');
 
 validateSession();
@@ -31,6 +33,7 @@ if(!isset($_SESSION['sessid'])){
 
     <!-- Page level plugin CSS-->
     <link href="vendor/datatables/dataTables.bootstrap4.css" rel="stylesheet">
+    <link href="css/select.dataTables.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin.css" rel="stylesheet">
@@ -194,6 +197,7 @@ if(!isset($_SESSION['sessid'])){
     <!-- Page level plugin JavaScript-->
     <script src="vendor/datatables/jquery.dataTables.js"></script>
     <script src="vendor/datatables/dataTables.bootstrap4.js"></script>
+    <script src="js/dataTables.select.min.js"></script>
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin.min.js"></script>
