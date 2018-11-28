@@ -113,11 +113,13 @@ function getRecord($data){
 function saveData($data){
 
 	$_data = $data->data;
+
 	$table = new Database(str_replace('-', '_', $data->table));
+
 	if($data->filter != ''){
 		$conditions = parseConditions($data->filter);
 		foreach($conditions as $condition_key => $condition_val){
-			$_data->{$condition_key} = $condition_val;
+			$_data->filter = $conditions;
 		}
 	}
 	else{
@@ -148,7 +150,7 @@ function saveData($data){
 		if(isset($_data['password'])){
 			unset($_data['password']);
 		}
-		$response = $table->updateData($_data, $id, true);	
+		$response = $table->updateData($_data, $id);
 	}
 	
 	print(json_encode($response));

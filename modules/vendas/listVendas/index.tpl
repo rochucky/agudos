@@ -1,4 +1,4 @@
-M      
+
 
         <div class="container-fluid">
 
@@ -48,7 +48,7 @@ M
         <script>
           var afterLoad = function(datatable){
             datatable.destroy()
-            $('tr td:nth-child(2)').each(function(){
+            $('tr td span[name=date]').each(function(){
               var dateTime = $(this).html().split(' ');
               var datePart = dateTime[0].split('-').reverse().join('/');
               $(this).html(datePart + ' ' + dateTime[1]);
@@ -91,7 +91,6 @@ M
                 notification("Nenhum registro selecionado", 'error');
                 return false;
               }
-              notification(code);
               customConfirm({
                 text: "Deseja realmente cancelar esta transação?",
                 yesFunction: function(){
@@ -100,7 +99,8 @@ M
                     "table": 'transactions',
                     "filter": "code|"+code,
                     "data": {
-                      "status": 2
+                      "status": 2,
+                      "id": "custom"
                     },
                     "method": "saveData"
                   };

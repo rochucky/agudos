@@ -68,10 +68,28 @@ class Database{
 
 		if($debug){
 			echo "DEBUG: ";
-			echo $this->conn->debug()->update($this->table, $data, array('id' => $id));	
+			if($id == 'custom'){
+				$where = $data['filter'];
+				unset($data['filter']);
+
+				echo $this->conn->debug()->update($this->table, $data, $where);	
+			}
+			else{
+				unset($data['filter']);
+				echo $this->conn->debug()->update($this->table, $data, array('id' => $id));	
+			}
 			die();
 		}
-		$return = $this->conn->update($this->table, $data, array('id' => $id));
+		if($id == 'custom'){
+			$where = $data['filter'];
+			unset($data['filter']);
+			
+			$return = $this->conn->update($this->table, $data, $where);	
+		}
+		else{
+			unset($data['filter']);
+			$return = $this->conn->update($this->table, $data, array('id' => $id));
+		}
 
 		return $return->errorInfo();
 	}
