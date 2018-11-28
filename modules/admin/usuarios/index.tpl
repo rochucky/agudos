@@ -90,7 +90,8 @@
           addButton('Alterar Senha', resetPassword);
 
           var afterLoad = function(){
-            $('tr td:nth-child(5)').each(function(){
+
+            $('tr td span[name="users.is-active"]').each(function(){
               if($(this).html() == '1'){
                 $(this).html('Sim');
               }
