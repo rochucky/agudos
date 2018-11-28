@@ -29,27 +29,6 @@
                     </select>
                   </div>
                   <div class="form-group">
-                    <label for="year">Ano</label>
-                    <input type="number" class="form-control" name="year" required/>
-                  </div>
-                  <div class="form-group">
-                    <label for="month">Mês</label>
-                    <select class="form-control" name="month" required>
-                      <option value="1">Janeiro</option>
-                      <option value="2">Fevereiro</option>
-                      <option value="3">Março</option>
-                      <option value="4">Abril</option>
-                      <option value="5">Maio</option>
-                      <option value="6">Junho</option>
-                      <option value="7">Julho</option>
-                      <option value="8">Agosto</option>
-                      <option value="9">Setembro</option>
-                      <option value="10">Outubro</option>
-                      <option value="11">Novembro</option>
-                      <option value="12">Dezembro</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
                     <label for="type">Valor</label>
                     <select class="form-control" name="type" required>
                       <option value="1">À vista</option>
@@ -71,8 +50,6 @@
                   <thead>
                     <tr>
                       <th data-field="users.name">Funcionário</th>
-                      <th data-field="year">Ano</th>
-                      <th data-field="month">Mes</th>
                       <th data-field="type">Tipo</th>
                       <th data-field="value">Saldo</th>
                     </tr>
@@ -90,30 +67,13 @@
 
         <script>
           var afterLoad = function(datatable){
-            var months = {
-              1: "Janeiro",
-              2: "Fevereiro",
-              3: "Março",
-              4: "Abril",
-              5: "Maio",
-              6: "Junho",
-              7: "Julho",
-              8: "Agosto",
-              9: "Setembro",
-              10: "Outubro",
-              11: "Novembro",
-              12: "Dezembro"
-            }
             
             var types = {
               1: "À Vista",
               2: "Parcelado",
             }            
 
-            $('tr td:nth-child(3)').each(function(){
-              $(this).html(months[$(this).html()]);
-            });
-            $('tr td:nth-child(4)').each(function(){
+            $('tr td span[name=type]').each(function(){
               $(this).html(types[$(this).html()]);
             });
 

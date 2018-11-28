@@ -1,13 +1,33 @@
 <?php 
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET,  OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type");
+
 include('classes/functions.php');
 
-validateSession();
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    die();
+}
+
+$data = json_decode($_POST['data']);
+
+if($data == ''){
+	$data = file_get_contents("php://input");
+	$data = json_decode($data)->data;
+}
+
+if($data->source == "mobile"){
+	print(json_encode( array('response' => 'ok')));
+	die();
+}
+else{
+	validateSession();
+}
+
 
 if(!isset($_SESSION['sessid'])){
 	die('session_error');
 }
-
-$data = json_decode($_POST['data']);
 
 call_user_func($data->method, $data);
 
@@ -166,8 +186,6 @@ function makeSale($data){
 
 		$balanceConditions = [
 			'user_id' => $userData[0],
-			'month' => date('m'),
-			'year' => date('Y'),
 			'type' => $balanceType
 		];
 
@@ -175,9 +193,12 @@ function makeSale($data){
 
 		$balanceData = $balanceTable-> getData($balanceFields, $balanceConditions, '');
 
+		$transactionsBalance = getMonthTransactions($transactionTable, $balanceConditions, $balanceType);
+		$balance = $balanceData[0]['value'] - $transactionsBalance;
+
 		if(isset($balanceData[0])){
 			$data->value = str_replace(array('.',','), array('','.'), $data->value);
-			if($balanceData[0]['value'] >= $data->value){
+			if($balance >= $data->value){
 				if($balanceType == 1){
 					$transactionData = [
 						'establishment_id' => $_SESSION['userid'],
@@ -218,6 +239,7 @@ function makeSale($data){
 			}
 			else{
 				$response['error'] = 'balance_not_enough';
+				$response['balance'] = $balance;
 			}
 		}
 		else{

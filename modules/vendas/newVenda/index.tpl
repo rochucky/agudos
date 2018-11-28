@@ -178,7 +178,9 @@
                   notification('Não há saldo cadastrado para o mês corrente', 'error');
                 }
                 if(response.error == 'balance_not_enough'){
-                  notification('Saldo insuficiente', 'error');
+                  customAlert({
+                    text: "Saldo insuficiente<br>Saldo: R$ " + response.balance
+                  });
                 }
                 if(response.error == '' && response[1] == null){
                   customAlert({ 
@@ -190,6 +192,7 @@
                   l.hide();
                 }
                 l.hide();
+                $('input[name=password]').val('');
               }
             })
 

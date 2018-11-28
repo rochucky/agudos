@@ -1,4 +1,4 @@
-      
+M      
 
         <div class="container-fluid">
 
@@ -59,7 +59,7 @@
               2: "Cancelada"
             };
 
-            $('tr td:nth-child(6)').each(function(){
+            $('tr td span[name=status]').each(function(){
               $(this).html(status[$(this).html()]);
             });
 
@@ -87,6 +87,10 @@
             $('.menu-btn-cancel').click(function(){
               var rowId = datatable.rows( { selected: true } ).ids()[0];
               var code = $('tr#'+rowId+' td span[name="transactions.code"]').html();
+              if(rowId == undefined){
+                notification("Nenhum registro selecionado", 'error');
+                return false;
+              }
               notification(code);
               customConfirm({
                 text: "Deseja realmente cancelar esta transação?",

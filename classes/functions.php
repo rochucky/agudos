@@ -76,6 +76,30 @@ function hashPassword($password){
 
 }
 
+function getMonthTransactions($transactionTable, $conditions, $balanceType){
+
+
+
+	$fields = array('value');
+	$conditions = array('user_id' => $conditions['user_id'], 'date[>=]' => date('Y-m-01'), 'status' => 1);
+	if($balanceType == 1){
+		$conditions['comments'] = 'À vista';
+	}
+	else{
+		$conditions['comments[!]'] = 'À vista';	
+	}
+
+	$result = $transactionTable->getData($fields, $conditions, '');
+
+	$value = 0;
+
+	foreach($result as $line){
+		$value += $line['value'];
+	}
+
+	return $value;
+	
+}
 
 
 ?>
