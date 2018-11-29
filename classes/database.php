@@ -14,7 +14,7 @@ class Database{
 		    'database_name' => 'agudos',
 		    'server' => 'localhost',
 		    'username' => 'root',
-		    'password' => 'eucs1234'
+		    'password' => ''
 		]);
 
 		$this->table = $table;

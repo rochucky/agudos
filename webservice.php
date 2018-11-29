@@ -13,7 +13,7 @@ $data = json_decode($_POST['data']);
 
 if($data == ''){
 	$data = file_get_contents("php://input");
-	$data = json_decode($data)->data;
+	$data = json_decode($data)->credentials;
 }
 
 if($data->source == "mobile"){

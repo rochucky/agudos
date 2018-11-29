@@ -12,9 +12,9 @@ if(isset($_POST['username']) && isset($_POST['password'])){
   $obj = new stdClass();
 
   
-  $obj->username = $_POST['username'];
-  $obj->password = $_POST['password']; 
-  $obj->usertype = $_POST['usertype'];
+  $obj->data->username = $_POST['username'];
+  $obj->data->password = $_POST['password']; 
+  $obj->data->usertype = $_POST['usertype'];
 
   $loginData = login($obj);
 
