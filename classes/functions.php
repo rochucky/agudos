@@ -101,5 +101,36 @@ function getMonthTransactions($transactionTable, $conditions, $balanceType){
 	
 }
 
+function changePassword($data){
+
+	if($data->data->oldPassword){
+		if($_SESSION['usertype'] == 'estabelecimento'){
+			$usersTable = new Database('establishments');
+		}
+		else{
+			$usersTable = new Database('users');
+		}
+		
+		$usersData = $usersTable->getData(array('password'), array('id' => $_SESSION['userid']), '');
+		
+		foreach($usersData as $user){
+			if(hashPassword($data->data->oldPassword) != $user['password']){
+				$result['error'] = true;
+				$result['message'] = 'Senha incorreta';
+			}else{
+				$updData = array('password' => hashPassword($data->data->password));
+				$result = $usersTable->updateData($updData, $_SESSION['userid']);
+			}
+		}
+	}
+	else{
+		$usersTable = new Database($data->table);
+		$updData = array('password' => hashPassword($data->data->password));
+		$result = $usersTable->updateData($updData, $data->id);
+	}
+
+	
+	print(json_encode($result));
+}
 
 ?>

@@ -71,9 +71,9 @@ if(!isset($_SESSION['sessid'])){
             Olá, <?= substr($_SESSION['name'],0,strpos($_SESSION['name']," ")); ?>  <i class="fas fa-user-circle fa-fw"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="#">Alterar Senha</a>
+            <a class="dropdown-item" href="" data-toggle="modal" data-target="#changePasswordModal">Alterar Senha</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Sair</a>
+            <a class="dropdown-item" href="" data-toggle="modal" data-target="#logoutModal">Sair</a>
           </div>
         </li>
       </ul>
@@ -85,7 +85,7 @@ if(!isset($_SESSION['sessid'])){
       <!-- Sidebar -->
       <ul class="sidebar navbar-nav main-menu">
         
-        <?php if(in_array($_SESSION['usertype'], array("dev", "admin"))): ?>
+        <?php if(in_array($_SESSION['usertype'], array("dev", "admin","funcionario"))): ?>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fas fa-fw fa-folder"></i>
@@ -159,29 +159,29 @@ if(!isset($_SESSION['sessid'])){
       </div>
     </div>
 
-    <!-- Logout Modal-->
-    <div class="modal fade" id="sessionModal" tabindex="-1" role="dialog" aria-labelledby="sessionModalLabel" aria-hidden="true">
+    <!-- Change Password Modal-->
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="sessionModalLabel">Sessão expirada</h5>
+            <h5 class="modal-title" id="changePasswordModalLabel">Alterar Senha</h5>
             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">×</span>
             </button>
           </div>
           <div class="modal-body">
-            <form id="sessionForm">
-              <label><?= $_SESSION['username'] ?></label>
-              <label for="password">Senha</label>
-              <input type="text" class="form-control" />
+            <form id="changePasswordForm">
+              <label for="oldPassword">Senha Atual</label>
+              <input type="password" class="form-control" name="oldPassword"/>
+              <label for="newPassword">Nova Senha</label>
+              <input type="password" class="form-control" name="newPassword"/>
+              <label for="confirmPassword">Confirmar Senha</label>
+              <input type="password" class="form-control" name="confirmPassword"/>
             </form>
           </div>
           <div class="modal-footer">
-            <button class="btn btn-secondary" type="button" data-dismiss="modal">Login</button>
-            <form method="POST" action="login.php">
-              <input type="hidden" name="logout" value="true"/>
-              <button type="submit" class="btn btn-primary">Sair</button>
-            </form>
+            <button class="btn btn-primary btn-change-password-main" type="button">Enviar</button>
+            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
           </div>
         </div>
       </div>

@@ -15,7 +15,7 @@
   }
 
   var loadCustomMod = function(modules){
-    $.get('modules/'+modules+'/index.tpl', function(html){
+    $.get('modules/'+modules+'/index.php', function(html){
       $('#content-wrapper').fadeOut('fast', function(){
         $('#content-wrapper').html('').html(html);
 
@@ -25,13 +25,13 @@
     
   }
 
-  $.get('modules/'+home+'/index.tpl', function(data){
+  $.get('modules/'+home+'/index.php', function(data){
     $('#content-wrapper').html(data);
   });
 
   var loadModule = function(modules){
 
-    $.get('modules/'+modules+'/index.tpl', function(html){
+    $.get('modules/'+modules+'/index.php', function(html){
         $('#content-wrapper').fadeOut('fast', function(){
           $('#content-wrapper').html('').html(html);
           
@@ -337,4 +337,50 @@
       return loadModule(modules);
     }
 
+  });
+
+  $('.btn-change-password-main').off('click').click(function(){
+
+    var oldPassword = $('input[name=oldPassword]').val();
+    var newPassword = $('input[name=newPassword]').val();
+    var confirmPassword = $('input[name=confirmPassword]').val();
+
+    if(newPassword == confirmPassword){
+      var data = {
+        "table": "users",
+        "id": $('input[name=id]').val(),
+        "data": {
+          "oldPassword": oldPassword,
+          "password": newPassword
+        },
+        "method": "changePassword"
+      };
+
+      data = JSON.stringify(data);
+
+      $.post('webservice.php', {data: data}, function(e){
+        response = JSON.parse(e);
+        if(response.error){
+          notification(response.message, 'error');
+        }
+        else if(response[1] == null){
+          $('#changePasswordModal').modal('hide');
+          notification('Senha alterada.');
+        }
+        else{
+          console.log(e);
+          notiification('Erro ao alterar a senha<br>Contate o administrador do sistema', 'error');
+        }
+      })
+    }
+    else{
+      notification('Senha e confirmação não coincidem.', 'error');
+    }
+
+  });
+
+  $('#changePasswordModal').on('hidden.bs.modal', function () {
+    $('input[name=oldPassword]').val('');
+    $('input[name=newPassword]').val('');
+    $('input[name=confirmPassword]').val('');
   });

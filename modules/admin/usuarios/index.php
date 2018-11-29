@@ -78,13 +78,75 @@
         </div>
         <!-- /.container-fluid -->
 
+        <!-- Password Modal -->
+        <!-- Change Password Modal-->
+        <div class="modal fade" id="passwordModal" tabindex="-1" role="dialog" aria-labelledby="passwordModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="passwordModalLabel">Alterar Senha</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">×</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form id="changePasswordForm">
+                  <label for="newPassword">Nova Senha</label>
+                  <input type="password" class="form-control" name="newPassword"/>
+                  <label for="confirmPassword">Confirmar Senha</label>
+                  <input type="password" class="form-control" name="confirmPassword"/>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button class="btn btn-primary btn-change-password" type="button">Enviar</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <script>
           var preSubmit = function(){
             
           }
 
           var resetPassword = function(){
-            notification('Senha resetada...');
+            $('#passwordModal').modal('show');
+
+            $('.btn-change-password').off('click').click(function(){
+
+              var newPassword = $('input[name=newPassword]').val();
+              var confirmPassword = $('input[name=confirmPassword]').val();
+
+              if(newPassword == confirmPassword){
+                var data = {
+                  "table": "users",
+                  "id": $('input[name=id]').val(),
+                  "data": {
+                    "password": newPassword
+                  },
+                  "method": "changePassword"
+                };
+
+                data = JSON.stringify(data);
+
+                $.post('webservice.php', {data: data}, function(e){
+                  response = JSON.parse(e);
+                  if(response[1] == null){
+                    $('#passwordModal').modal('hide');
+                    notification('Senha alterada.');
+                    loadModule('admin/usuarios');
+                  }
+                  else{
+                    notiification('Erro ao alterar a senha<br>Contate o administrador do sistema', 'error');
+                  }
+                })
+              }
+              else{
+                notification('Senha e confirmação não coincidem.', 'error');
+              }
+
+            });
           }
 
           addButton('Alterar Senha', resetPassword);
