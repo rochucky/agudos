@@ -3,7 +3,12 @@ session_start();
 
 include("database.php");
 
-function login($username, $password, $usertype){
+function login($data){
+
+	$username = $data->data->username;
+	$password = $data->data->password;
+	$usertype = $data->data->usertype;
+	$source = $data->source;
 
 	$DB = new Database($usertype);
 
@@ -25,28 +30,35 @@ function login($username, $password, $usertype){
 
 	if(count($userdata) == 1){
 
-
-		$_SESSION['sessid'] = session_id();
-		$_SESSION['name'] = $name;
-		$_SESSION['userid'] = $userid;
-		$_SESSION['time'] = time();
-
-		if($user_type == 'estabelecimento'){
-			$_SESSION['usertype'] = $user_type;
+		if($source == 'mobile'){
+			$result['token'] = session_id();
+			$result['name'] = $name;
+			$result['userid'] = $userid;
 		}
 		else{
+			$_SESSION['sessid'] = session_id();
+			$_SESSION['name'] = $name;
+			$_SESSION['userid'] = $userid;
+			$_SESSION['time'] = time();
 
-			$usertypeTable = new Database('user_types');
-			$user_type = $usertypeTable->getData(['name'], ['id' => $user_type]);
-			$_SESSION['usertype'] = $user_type[0]['name'];
+			if($user_type == 'estabelecimento'){
+				$_SESSION['usertype'] = $user_type;
+			}
+			else{
+
+				$usertypeTable = new Database('user_types');
+				$user_type = $usertypeTable->getData(['name'], ['id' => $user_type]);
+				$_SESSION['usertype'] = $user_type[0]['name'];
+			}
 		}
 		
 	}
 	else{
-		$result['error'] = 'Usuário ou senha inválidos';
+		$result['error'] = true;
+		$result['message'] = "Usuário ou senha incorretos";
 	}
 
-	return $result;
+	print_r(json_encode($result));
 	
 }
 

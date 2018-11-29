@@ -17,16 +17,13 @@ if($data == ''){
 }
 
 if($data->source == "mobile"){
-	print(json_encode( array('response' => 'ok')));
-	die();
+
 }
 else{
 	validateSession();
-}
-
-
-if(!isset($_SESSION['sessid'])){
+	if(!isset($_SESSION['sessid'])){
 	die('session_error');
+}
 }
 
 call_user_func($data->method, $data);

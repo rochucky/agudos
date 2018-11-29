@@ -8,7 +8,15 @@ if(isset($_POST['logout'])){
 $loginError = '';
 
 if(isset($_POST['username']) && isset($_POST['password'])){
-  $loginData = login($_POST['username'],$_POST['password'], $_POST['usertype']);
+
+  $obj = new stdClass();
+
+  
+  $obj->username = $_POST['username'];
+  $obj->password = $_POST['password']; 
+  $obj->usertype = $_POST['usertype'];
+
+  $loginData = login($obj);
 
   if(isset($loginData['error'])){
     $loginError = $loginData['error'];
