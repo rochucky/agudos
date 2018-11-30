@@ -10,7 +10,7 @@ $loginError = '';
 if(isset($_POST['username']) && isset($_POST['password'])){
 
   $obj = new stdClass();
-
+  $obj->data = new stdClass();
   
   $obj->data->username = $_POST['username'];
   $obj->data->password = $_POST['password']; 
@@ -19,7 +19,7 @@ if(isset($_POST['username']) && isset($_POST['password'])){
   $loginData = login($obj);
 
   if(isset($loginData['error'])){
-    $loginError = $loginData['error'];
+    $loginError = $loginData['message'];
   }
   else{
     header('Location: index.php');

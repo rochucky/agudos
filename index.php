@@ -85,7 +85,7 @@ if(!isset($_SESSION['sessid'])){
       <!-- Sidebar -->
       <ul class="sidebar navbar-nav main-menu">
         
-        <?php if(in_array($_SESSION['usertype'], array("dev", "admin","funcionario"))): ?>
+        <?php if(in_array($_SESSION['usertype'], array("dev", "admin"))): ?>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fas fa-fw fa-folder"></i>
@@ -97,6 +97,16 @@ if(!isset($_SESSION['sessid'])){
               <a class="dropdown-item menu-item" data-module="cadastro/saldo" href="">Saldo Mensal</a>
             </div>
           </li>
+          <!--<li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fas fa-fw fa-folder"></i>
+              <span>Financeiro</span>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="pagesDropdown">
+              <a class="dropdown-item menu-item" data-module="financeiro/transacoes" href="">Transações</a>
+              <a class="dropdown-item menu-item" data-module="financeiro/relatorios" href="">Relatórios</a>
+            </div>
+          </li> -->
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fas fa-fw fa-folder"></i>
@@ -108,7 +118,7 @@ if(!isset($_SESSION['sessid'])){
             </div>
           </li>
         <?php endif; ?>
-        <?php if(in_array($_SESSION['usertype'], array("dev", "estabelecimento"))): ?>
+        <?php if(in_array($_SESSION['usertype'], array("estabelecimento"))): ?>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fas fa-fw fa-folder"></i>

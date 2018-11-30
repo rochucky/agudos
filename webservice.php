@@ -60,7 +60,7 @@ function getTableData($data){
 		$conditions = null;
 	}
 
-	if(property_exists($data, 'filter')){
+	if(property_exists($data, 'join')){
 		$joins = parseConditions($data->join);
 	}
 	else{

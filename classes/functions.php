@@ -58,7 +58,13 @@ function login($data){
 		$result['message'] = "Usuário ou senha incorretos";
 	}
 
-	print_r(json_encode($result));
+
+	if($source == 'mobile'){
+		print_r(json_encode($result));
+	}
+	else{
+		return $result;
+	}
 	
 }
 
