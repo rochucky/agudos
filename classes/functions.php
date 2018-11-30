@@ -200,6 +200,7 @@ function getBalanceData($data){
 	
 	$currentDebt = 0;
 	$futureDebt = 0;
+	$establishmentData = array();
 
 	foreach($transactionData as $transactionLine){
 		if($transactionLine['transactions']['comments'] == 'À Vista'){
@@ -207,9 +208,15 @@ function getBalanceData($data){
 		}
 		else{
 			$balanceParcelado -= $transactionLine['transactions']['value'];
+
 		}
 		if(date('m', strtotime($transactionLine['transactions']['date'])) == date('m')){
 			$currentDebt += $transactionLine['transactions']['value'];
+			$establishmentData[] = array(
+				'name' => $transactionLine['establishments']['name'],
+				'value' => $transactionLine['transactions']['value'],
+				'date' => date('d/m/Y', strtotime($transactionLine['transactions']['date']))
+			);
 		}
 		else{
 			$futureDebt += $transactionLine['transactions']['value'];
@@ -221,6 +228,7 @@ function getBalanceData($data){
 		'parcelado' => $balanceParcelado,
 		'atual' => $currentDebt,
 		'futuro' => $futureDebt,
+		'establishment' => $establishmentData,
 		'error' => false
 	);
 
