@@ -117,8 +117,7 @@ if(!isset($_SESSION['sessid'])){
               <a class="dropdown-item menu-item" data-module="admin/tiposUsuarios" href="">Tipos de Usuários</a>
             </div>
           </li>
-        <?php endif; ?>
-        <?php if(in_array($_SESSION['usertype'], array("estabelecimento"))): ?>
+        
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
               <i class="fas fa-fw fa-folder"></i>

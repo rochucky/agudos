@@ -3,6 +3,28 @@ session_start();
 
 include("database.php");
 
+function parseConditions($string){
+	
+	if($string == null){
+		return null;
+	}
+
+	$data = array();
+
+	$parse1 = explode(":", $string);
+	foreach($parse1 as $parse1_val){
+		$parse2 = explode('|', $parse1_val);
+		if(isset($parse2[2])){
+			$data[str_replace('-', '_', $parse2[0])] = array(str_replace('-', '_', $parse2[1]) => str_replace('-', '_', $parse2[2]));
+		}
+		else{
+			$data[str_replace('-', '_', $parse2[0])] = $parse2[1];
+		}
+
+	}
+	return $data;
+}
+
 function login($data){
 
 	$username = $data->data->username;
@@ -149,6 +171,60 @@ function changePassword($data){
 
 	
 	print(json_encode($result));
+}
+
+function getBalanceData($data){
+
+	$userid = $data->data->userid;
+
+	$balanceTable = new Database('balance');
+	$transactionTable = new Database('transactions');
+
+	$balanceData = $balanceTable->getData(array('value', 'type'), array('user_id' => $userid));
+	foreach($balanceData as $balanceLine){
+		if($balanceLine['type'] == 1){
+			$balanceAvista = $balanceLine['value'];
+		}
+		else{
+			$balanceParcelado = $balanceLine['value'];
+		}
+	}
+
+	$transactionData = $transactionTable->getData(
+			array(
+				'transactions' => array('value', 'comments', 'status', 'date'),
+				'establishments' => array('name')
+			),  // Campos
+			array('user_id' => $userid, 'status' => 1, 'date[>=]' => date('Y-m-01'), 'ORDER' => array('date' => 'DESC') ),  // Where
+			array('[>]establishments' => array('transactions.establishment_id' => 'id'))); // Join
+	
+	$currentDebt = 0;
+	$futureDebt = 0;
+
+	foreach($transactionData as $transactionLine){
+		if($transactionLine['transactions']['comments'] == 'À Vista'){
+			$balanceAvista -= $transactionLine['transactions']['value'];
+		}
+		else{
+			$balanceParcelado -= $transactionLine['transactions']['value'];
+		}
+		if(date('m', strtotime($transactionLine['transactions']['date'])) == date('m')){
+			$currentDebt += $transactionLine['transactions']['value'];
+		}
+		else{
+			$futureDebt += $transactionLine['transactions']['value'];
+		}
+	}
+
+	$response = array(
+		'avista' => $balanceAvista,
+		'parcelado' => $balanceParcelado,
+		'atual' => $currentDebt,
+		'futuro' => $futureDebt,
+		'error' => false
+	);
+
+	print_r(json_encode($response));
 }
 
 ?>

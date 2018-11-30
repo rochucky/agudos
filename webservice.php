@@ -28,28 +28,6 @@ else{
 
 call_user_func($data->method, $data);
 
-function parseConditions($string){
-	
-	if($string == null){
-		return null;
-	}
-
-	$data = array();
-
-	$parse1 = explode(":", $string);
-	foreach($parse1 as $parse1_val){
-		$parse2 = explode('|', $parse1_val);
-		if(isset($parse2[2])){
-			$data[str_replace('-', '_', $parse2[0])] = array(str_replace('-', '_', $parse2[1]) => str_replace('-', '_', $parse2[2]));
-		}
-		else{
-			$data[str_replace('-', '_', $parse2[0])] = $parse2[1];
-		}
-
-	}
-	return $data;
-}
-
 function getTableData($data){
 
 	$table = new Database(str_replace('-', '_', $data->table));
