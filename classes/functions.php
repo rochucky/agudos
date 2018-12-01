@@ -195,7 +195,7 @@ function getBalanceData($data){
 				'transactions' => array('value', 'comments', 'status', 'date'),
 				'establishments' => array('name')
 			),  // Campos
-			array('user_id' => $userid, 'status' => 1, 'date[>=]' => date('Y-m-01'), 'ORDER' => array('date' => 'DESC') ),  // Where
+			array('user_id' => $userid, 'status' => 1, 'date[>=]' => date('Y-m-01'), 'ORDER' => array('date' => 'ASC') ),  // Where
 			array('[>]establishments' => array('transactions.establishment_id' => 'id'))); // Join
 	
 	$currentDebt = 0;
@@ -215,7 +215,8 @@ function getBalanceData($data){
 			$establishmentData[] = array(
 				'name' => $transactionLine['establishments']['name'],
 				'value' => $transactionLine['transactions']['value'],
-				'date' => date('d/m/Y', strtotime($transactionLine['transactions']['date']))
+				'date' => date('d/m/Y H:i', strtotime($transactionLine['transactions']['date'])),
+				'type' => $transactionLine['transactions']['comments']
 			);
 		}
 		else{
@@ -224,10 +225,10 @@ function getBalanceData($data){
 	}
 
 	$response = array(
-		'avista' => $balanceAvista,
-		'parcelado' => $balanceParcelado,
-		'atual' => $currentDebt,
-		'futuro' => $futureDebt,
+		'avista' => round($balanceAvista, 2),
+		'parcelado' => round($balanceParcelado, 2),
+		'atual' => round($currentDebt, 2),
+		'futuro' => round($futureDebt, 2),
 		'establishment' => $establishmentData,
 		'error' => false
 	);
