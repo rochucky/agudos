@@ -44,6 +44,10 @@
                     <input type="text" class="form-control" name="cnpj" required/>
                   </div>
                   <div class="form-group">
+                    <label for="address">Endereço</label>
+                    <input type="text" class="form-control" name="address"/>
+                  </div>
+                  <div class="form-group">
                     <input type="submit" class="table-form-submit btn btn-success" value="Salvar"/>
                     <button class="table-form-delete btn btn-danger hidden" data-name="name">Excluir</button>
                   </div>
@@ -55,9 +59,9 @@
                     <tr>
                       <th data-field="code">Código</th>
                       <th data-field="name">Nome</th>
-                      <th data-field="email">Email</th>
                       <th data-field="description">Descritivo</th>
                       <th data-field="cnpj">CNPJ</th>
+                      <th data-field="address">Endereço</th>
                     </tr>
                   </thead>
                   <tbody>
