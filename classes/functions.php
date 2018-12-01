@@ -236,4 +236,19 @@ function getBalanceData($data){
 	print_r(json_encode($response));
 }
 
+function getEstablishments($data){
+
+	$userid = $data->data->userid;
+
+	$establishmentsTable = new Database('establishments');
+
+	$establishmentsData = $establishmentsTable->getData(
+		array('name','address'),
+		'',
+		''
+	);
+	
+	print_r(json_encode($establishmentsData));
+}
+
 ?>
