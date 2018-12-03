@@ -47,7 +47,7 @@ function login($data){
 		$userid = $userdata[0]['id'];
 		$user_type = 'estabelecimento';
 	}
-
+	
 	$result = array();
 
 	if(count($userdata) == 1){
@@ -56,6 +56,7 @@ function login($data){
 			$result['token'] = session_id();
 			$result['name'] = $name;
 			$result['userid'] = $userid;
+			$result['usertype'] = $usertype;
 		}
 		else{
 			$_SESSION['sessid'] = session_id();
@@ -265,15 +266,57 @@ function getUserTransactions($data){
 		array('[>]establishments' => array('transactions.establishment_id' => 'id'))
 	);
 	
-	foreach($transactionsData as $val){
-		$response[] = array(
-			'code' => $val['transactions']['code'],
-			'date' => date('d/m/Y H:i', strtotime($val['transactions']['date'])),
-			'name' => $val['establishments']['name'],
-			'value' => $val['transactions']['value'],
-			'type' => $val['transactions']['comments'],
-			'visibility' => ($val['transactions']['date'] <= date('Y-m_d')) ? '' : 'hide'
-		);
+	if($transactionsData == null){
+		$response['error'] = true;
+		$response['message'] = "Nenhum dado encontrado";
+	}
+	else{
+
+		foreach($transactionsData as $val){
+			$response[] = array(
+				'code' => $val['transactions']['code'],
+				'date' => date('d/m/Y H:i', strtotime($val['transactions']['date'])),
+				'name' => $val['establishments']['name'],
+				'value' => $val['transactions']['value'],
+				'type' => $val['transactions']['comments'],
+				'visibility' => ($val['transactions']['date'] <= date('Y-m_d')) ? '' : 'hide'
+			);
+		}
+	}
+
+	print_r(json_encode($response));
+}
+
+function getEstablishmentTransactions($data){
+
+	$userid = $data->data->userid;
+
+	$transactionsTable = new Database('transactions');
+
+	$transactionsData = $transactionsTable->getData(
+		array(
+			'transactions' => array('transactions.code','date','value','comments'),
+			'establishments' => array('name')),
+		array('transactions.establishment_id' => $userid, 'transactions.status' => 1, 'date[>=]' => date('Y-m-01'), 'ORDER' => array('transactions.date' => 'DESC')),
+		array('[>]establishments' => array('transactions.establishment_id' => 'id'))
+	);
+
+	if($transactionsData == null){
+		$response['error'] = true;
+		$response['message'] = "Nenhum dado encontrado";
+	}
+	else{
+
+		foreach($transactionsData as $val){
+			$response[] = array(
+				'code' => $val['transactions']['code'],
+				'date' => date('d/m/Y H:i', strtotime($val['transactions']['date'])),
+				'name' => $val['establishments']['name'],
+				'value' => $val['transactions']['value'],
+				'type' => $val['transactions']['comments'],
+				'visibility' => ($val['transactions']['date'] <= date('Y-m_d')) ? '' : 'hide'
+			);
+		}
 	}
 
 	print_r(json_encode($response));
