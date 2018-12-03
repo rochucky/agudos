@@ -77,7 +77,13 @@ function getRecord($data){
 	}
 
 	$results = $table->getData('*', $conditions, '');
-
+	if($results == null){
+		print_r(json_encode(array(
+			'error' => true,
+			'message' => 'Não encontramos usuário vinculado a este CPF'
+		)));
+		return false;
+	}
 	foreach($results as $result){
 		$record = json_encode($result);
 	}

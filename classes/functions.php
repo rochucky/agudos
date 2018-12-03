@@ -35,14 +35,14 @@ function login($data){
 	$DB = new Database($usertype);
 
 	if($usertype == 'users'){
-		$userdata = $DB->getData(['id','name', 'user_type_id'], ['username' => $username, 'password' => hashPassword($password)]);
+		$userdata = $DB->getData(['id','name', 'user_type_id', 'is_active'], ['username' => $username, 'password' => hashPassword($password)]);
 		$name = $userdata[0]['name'];
 		$userid = $userdata[0]['id'];
 		$user_type = $userdata[0]['user_type_id'];
 	}
-	
+
 	if($usertype == 'establishments'){
-		$userdata = $DB->getData(['id','name'], ['cnpj' => $username, 'password' => hashPassword($password)]);
+		$userdata = $DB->getData(['id','name', 'is_active'], ['cnpj' => $username, 'password' => hashPassword($password)]);
 		$name = $userdata[0]['name'];
 		$userid = $userdata[0]['id'];
 		$user_type = 'estabelecimento';
@@ -50,7 +50,15 @@ function login($data){
 	
 	$result = array();
 
+	
 	if(count($userdata) == 1){
+
+		if($userdata[0]['is_active'] != 1){
+			$result['error'] = true;
+			$result['message'] = "Usuário inativo";
+			print_r(json_encode($result));
+			return false;
+		}
 
 		if($source == 'mobile'){
 			$result['token'] = session_id();
@@ -80,7 +88,6 @@ function login($data){
 		$result['error'] = true;
 		$result['message'] = "Usuário ou senha incorretos";
 	}
-
 
 	if($source == 'mobile'){
 		print_r(json_encode($result));
@@ -279,7 +286,7 @@ function getUserTransactions($data){
 				'name' => $val['establishments']['name'],
 				'value' => $val['transactions']['value'],
 				'type' => $val['transactions']['comments'],
-				'visibility' => ($val['transactions']['date'] <= date('Y-m_d')) ? '' : 'hide'
+				'visibility' => ($val['transactions']['date'] <= date('Y-m-d')) ? '' : 'hide'
 			);
 		}
 	}
@@ -295,9 +302,9 @@ function getEstablishmentTransactions($data){
 
 	$transactionsData = $transactionsTable->getData(
 		array(
-			'transactions' => array('transactions.code','date','value','comments'),
+			'transactions' => array('transactions.code','date','value','comments','status'),
 			'establishments' => array('name')),
-		array('transactions.establishment_id' => $userid, 'transactions.status' => 1, 'date[>=]' => date('Y-m-01'), 'ORDER' => array('transactions.date' => 'DESC')),
+		array('transactions.establishment_id' => $userid, 'date[>=]' => date('Y-m-01'), 'ORDER' => array('transactions.date' => 'DESC')),
 		array('[>]establishments' => array('transactions.establishment_id' => 'id'))
 	);
 
@@ -314,7 +321,9 @@ function getEstablishmentTransactions($data){
 				'name' => $val['establishments']['name'],
 				'value' => $val['transactions']['value'],
 				'type' => $val['transactions']['comments'],
-				'visibility' => ($val['transactions']['date'] <= date('Y-m_d')) ? '' : 'hide'
+				'visibility' => ($val['transactions']['date'] <= date('Y-m-d')) ? '' : 'hide',
+				'status' => ($val['transactions']['status'] == 1) ? '' : 'Cancelada',
+				'cancelButton' => ($val['transactions']['status'] == 1) ? '' : 'hide'
 			);
 		}
 	}

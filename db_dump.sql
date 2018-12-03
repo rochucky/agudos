@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 5.7.24, for Linux (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.31-MariaDB, for Win32 (AMD64)
 --
 -- Host: localhost    Database: agudos
 -- ------------------------------------------------------
--- Server version	5.7.24-0ubuntu0.16.04.1
+-- Server version	10.1.31-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -62,6 +62,7 @@ CREATE TABLE `establishments` (
   `cnpj` varchar(45) NOT NULL,
   `password` varchar(150) NOT NULL,
   `description` varchar(150) NOT NULL,
+  `is_active` tinyint(4) DEFAULT NULL,
   `created` datetime DEFAULT NULL,
   `created_by` int(11) DEFAULT NULL,
   `updated` datetime DEFAULT NULL,
@@ -83,7 +84,7 @@ CREATE TABLE `establishments` (
 
 LOCK TABLES `establishments` WRITE;
 /*!40000 ALTER TABLE `establishments` DISABLE KEYS */;
-INSERT INTO `establishments` VALUES (8,'Casa das AlianÃ§as','78744244000176','$2y$12$tYNzbWiPsoX2D/TPqv14DuExNh5phNi3We9kihqegorrQVpCMGkI.','Casa das AlianÃ§as',NULL,NULL,'2018-12-01 15:03:08',1,NULL,NULL,1,'teste@gmail.com','Av. InconfidÃªncia Mineira, 35'),(15,'Coxinha da VovÃ³','56531196000103','$2y$12$tYNzbWiPsoX2D/TPqv14DuExNh5phNi3We9kihqegorrQVpCMGkI.','Coxinha da VovÃ³',NULL,NULL,'2018-12-01 15:03:27',1,NULL,NULL,3,'est2@gmail.com','Rua JoÃ£o Jacinto Silva, 94'),(16,'Galeria do Rock','99848236000140','$2y$12$tYNzbWiPsoX2D/TPqv14DuKVxMl2t82JrmITJnMv7lXyM3telwMcG','Galeria do Rock','2018-12-01 04:20:46',1,NULL,NULL,NULL,NULL,2,'galeriadorock@gmail.com','PraÃ§a JoÃ£o Mendes, 32');
+INSERT INTO `establishments` VALUES (8,'Casa das AlianÃ§as','78744244000176','$2y$12$tYNzbWiPsoX2D/TPqv14DuExNh5phNi3We9kihqegorrQVpCMGkI.','Casa das AlianÃ§as',1,NULL,NULL,'2018-12-03 19:32:33',1,NULL,NULL,1,'teste@gmail.com','Av. InconfidÃªncia Mineira, 35'),(15,'Coxinha da VovÃ³','56531196000103','$2y$12$tYNzbWiPsoX2D/TPqv14DuExNh5phNi3We9kihqegorrQVpCMGkI.','Coxinha da VovÃ³',1,NULL,NULL,'2018-12-03 21:38:28',90,NULL,NULL,3,'est2@gmail.com','Rua JoÃ£o Jacinto Silva, 94'),(16,'Galeria do Rock','99848236000140','$2y$12$tYNzbWiPsoX2D/TPqv14DuKVxMl2t82JrmITJnMv7lXyM3telwMcG','Galeria do Rock',1,'2018-12-01 04:20:46',1,'2018-12-03 19:32:37',1,NULL,NULL,2,'galeriadorock@gmail.com','PraÃ§a JoÃ£o Mendes, 32');
 /*!40000 ALTER TABLE `establishments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,7 +120,7 @@ CREATE TABLE `transactions` (
 
 LOCK TABLES `transactions` WRITE;
 /*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
-INSERT INTO `transactions` VALUES (1,15,83,22.37,'2018-12-01 15:07:44','Ã€ Vista',1,'2018120115074415','2018-12-01 15:07:44',15,NULL,NULL,NULL,NULL),(2,15,83,33.10,'2018-12-01 15:10:00','Ã€ Vista',1,'2018120115100015','2018-12-01 15:10:00',15,NULL,NULL,NULL,NULL),(3,8,83,266.67,'2018-12-01 00:00:00','1/3',1,'201812011541518','2018-12-01 15:41:51',8,NULL,NULL,NULL,NULL),(4,8,83,266.67,'2019-01-01 00:00:00','2/3',1,'201812011541518','2018-12-01 15:41:51',8,NULL,NULL,NULL,NULL),(5,8,83,266.67,'2019-02-01 00:00:00','3/3',1,'201812011541518','2018-12-01 15:41:51',8,NULL,NULL,NULL,NULL);
+INSERT INTO `transactions` VALUES (1,15,83,22.37,'2018-12-01 15:07:44','Ã€ Vista',2,'2018120115074415','2018-12-01 15:07:44',15,'2018-12-03 22:02:58',NULL,NULL,NULL),(2,15,83,33.10,'2018-12-01 15:10:00','Ã€ Vista',2,'2018120115100015','2018-12-01 15:10:00',15,'2018-12-03 21:59:01',NULL,NULL,NULL),(3,8,83,266.67,'2018-12-01 00:00:00','1/3',1,'201812011541518','2018-12-01 15:41:51',8,'2018-12-03 20:33:51',90,NULL,NULL),(4,8,83,266.67,'2019-01-01 00:00:00','2/3',1,'201812011541518','2018-12-01 15:41:51',8,'2018-12-03 20:33:51',90,NULL,NULL),(5,8,83,266.67,'2019-02-01 00:00:00','3/3',1,'201812011541518','2018-12-01 15:41:51',8,'2018-12-03 20:33:51',90,NULL,NULL);
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -182,7 +183,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `code_UNIQUE` (`code`),
   KEY `user_type_id` (`user_type_id`),
   CONSTRAINT `users_ibfk_1` FOREIGN KEY (`user_type_id`) REFERENCES `user_types` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -191,7 +192,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Administrador do Sistema','alves.rodrigo31@outlook.com','admin','$2y$12$tYNzbWiPsoX2D/TPqv14DuVgct/cGfbeOKqqPzxXw/WTgLjs4I8eW',3,'2018-05-07 13:48:42',1,'2018-11-29 01:39:38',1,NULL,NULL,1,NULL,'1',NULL),(83,'Rodrigo Alves','alves.rodrigo31@outlook.com','35843016889','$2y$12$tYNzbWiPsoX2D/TPqv14DuExNh5phNi3We9kihqegorrQVpCMGkI.',5,NULL,NULL,'2018-11-29 02:44:27',1,NULL,NULL,1,'35843016889','2',NULL),(85,'FuncionÃ¡rio Teste','funcionario@teste.com.br','65397334022','$2y$12$tYNzbWiPsoX2D/TPqv14DuExNh5phNi3We9kihqegorrQVpCMGkI.',5,NULL,NULL,'2018-11-29 00:13:11',1,NULL,NULL,1,'65397334022','3',NULL),(86,'Luciana Digna das Neves','ld@gmail.com','36959735874','$2y$12$tYNzbWiPsoX2D/TPqv14DuExNh5phNi3We9kihqegorrQVpCMGkI.',5,NULL,NULL,'2018-11-29 01:33:38',1,NULL,NULL,0,'36959735874','4',NULL),(88,'JoÃ£o da Silva','js@gmail.com','16899463008','$2y$12$tYNzbWiPsoX2D/TPqv14DuZy4/6AkmfkhsJttNIOR6yOCzYiFsZoW',5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'16899463008','5',NULL),(89,'Raul Alves','ra@gmail.com','63140455097','$2y$12$tYNzbWiPsoX2D/TPqv14DuQBoqgirf4nPC1/l58B4ewGkWghy3Gqm',5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'63140455097','6',NULL);
+INSERT INTO `users` VALUES (1,'Desenvolvedor do Sistema','alves.rodrigo31@outlook.com','dev','$2y$12$tYNzbWiPsoX2D/TPqv14DuVgct/cGfbeOKqqPzxXw/WTgLjs4I8eW',3,'2018-05-07 13:48:42',1,'2018-12-03 16:18:12',1,NULL,NULL,1,NULL,'1',NULL),(83,'Rodrigo Alves','alves.rodrigo31@outlook.com','35843016889','$2y$12$tYNzbWiPsoX2D/TPqv14DuExNh5phNi3We9kihqegorrQVpCMGkI.',5,NULL,NULL,'2018-11-29 02:44:27',1,NULL,NULL,1,'35843016889','2',NULL),(85,'FuncionÃ¡rio Teste','funcionario@teste.com.br','65397334022','$2y$12$tYNzbWiPsoX2D/TPqv14DuExNh5phNi3We9kihqegorrQVpCMGkI.',5,NULL,NULL,'2018-11-29 00:13:11',1,NULL,NULL,1,'65397334022','3',NULL),(86,'Luciana Digna das Neves','ld@gmail.com','36959735874','$2y$12$tYNzbWiPsoX2D/TPqv14DuExNh5phNi3We9kihqegorrQVpCMGkI.',5,NULL,NULL,'2018-12-03 19:25:25',1,NULL,NULL,0,'36959735874','4',NULL),(88,'JoÃ£o da Silva','js@gmail.com','16899463008','$2y$12$tYNzbWiPsoX2D/TPqv14DuZy4/6AkmfkhsJttNIOR6yOCzYiFsZoW',5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'16899463008','5',NULL),(89,'Raul Alves','ra@gmail.com','63140455097','$2y$12$tYNzbWiPsoX2D/TPqv14DuQBoqgirf4nPC1/l58B4ewGkWghy3Gqm',5,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'63140455097','6',NULL),(90,'Administrador do Sistema',NULL,'admin','$2y$12$tYNzbWiPsoX2D/TPqv14Duuu88pcX6t5ub2aXeEupAptCxx6UlMXy',2,'2018-12-03 16:19:01',1,'2018-12-03 16:19:36',1,NULL,NULL,1,NULL,'10',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -204,4 +205,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-01 15:52:44
+-- Dump completed on 2018-12-03 20:24:14

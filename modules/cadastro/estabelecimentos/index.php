@@ -48,6 +48,13 @@
                     <input type="text" class="form-control" name="address"/>
                   </div>
                   <div class="form-group">
+                    <label for="is_active">Ativo?</label>
+                    <select class="form-control" name="is-active" required> 
+                      <option value="1">Sim</option>
+                      <option value="0">Não</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
                     <input type="submit" class="table-form-submit btn btn-success" value="Salvar"/>
                     <button class="table-form-delete btn btn-danger hidden" data-name="name">Excluir</button>
                   </div>
@@ -62,6 +69,7 @@
                       <th data-field="description">Descritivo</th>
                       <th data-field="cnpj">CNPJ</th>
                       <th data-field="address">Endereço</th>
+                      <th data-field="is_active">Ativo?</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -154,6 +162,19 @@
             
             $(this).val($(this).val().replace(/[^\d]+/g,''));
           });
+
+          var afterLoad = function(){
+
+            $('tr td span[name="is_active"]').each(function(){
+              if($(this).html() == '1'){
+                $(this).html('Sim');
+              }
+              else{
+                $(this).html('Não');
+              }
+            })
+          }
+
         </script>
 
         <!-- Sticky Footer 
