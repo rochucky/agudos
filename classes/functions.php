@@ -286,7 +286,7 @@ function getUserTransactions($data){
 				'name' => $val['establishments']['name'],
 				'value' => $val['transactions']['value'],
 				'type' => $val['transactions']['comments'],
-				'visibility' => ($val['transactions']['date'] <= date('Y-m-d')) ? '' : 'hide'
+				'visibility' => ($val['transactions']['date'] <= date('Y-m-d', strtotime('tomorrow'))) ? '' : 'hide'
 			);
 		}
 	}
