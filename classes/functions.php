@@ -303,9 +303,9 @@ function getEstablishmentTransactions($data){
 	$transactionsData = $transactionsTable->getData(
 		array(
 			'transactions' => array('transactions.code','date','value','comments','status'),
-			'establishments' => array('name')),
+			'users' => array('name')),
 		array('transactions.establishment_id' => $userid, 'date[>=]' => date('Y-m-01'), 'ORDER' => array('transactions.date' => 'DESC')),
-		array('[>]establishments' => array('transactions.establishment_id' => 'id'))
+		array('[>]users' => array('transactions.user_id' => 'id'))
 	);
 
 	if($transactionsData == null){
@@ -318,10 +318,9 @@ function getEstablishmentTransactions($data){
 			$response[] = array(
 				'code' => $val['transactions']['code'],
 				'date' => date('d/m/Y H:i', strtotime($val['transactions']['date'])),
-				'name' => $val['establishments']['name'],
+				'name' => $val['users']['name'],
 				'value' => $val['transactions']['value'],
 				'type' => $val['transactions']['comments'],
-				'visibility' => ($val['transactions']['date'] <= date('Y-m-d')) ? '' : 'hide',
 				'status' => ($val['transactions']['status'] == 1) ? '' : 'Cancelada',
 				'cancelButton' => ($val['transactions']['status'] == 1) ? '' : 'hide'
 			);

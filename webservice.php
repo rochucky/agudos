@@ -152,6 +152,8 @@ function makeSale($data){
 	$balanceTable = new Database('balance');
 	$transactionTable = new Database('transactions');
 
+	$id = ($data->source == 'mobile') ? $data->id : $_SESSION['userid'];
+
 	$userConditions = [
 		'username' => $data->cpf,
 		'password' => hashPassword($data->password)
@@ -184,13 +186,13 @@ function makeSale($data){
 			if($balance >= $data->value){
 				if($balanceType == 1){
 					$transactionData = [
-						'establishment_id' => $_SESSION['userid'],
+						'establishment_id' => $id,
 						'user_id' => $userData[0],
 						'value' => $data->value,
 						'date' => date('Y-m-d H:i:s'),
 						'comments' => 'À Vista',
 						'status' => 1,
-						'code' => date('YmdHis').$_SESSION['userid']
+						'code' => date('YmdHis').$id
 					];
 
 					$response = $transactionTable->insertData($transactionData);
@@ -200,10 +202,10 @@ function makeSale($data){
 				else{
 					$count = 0;
 					$value = $data->value/$data->installments;
-					$code = date('YmdHis').$_SESSION['userid'];
+					$code = date('YmdHis').$id;
 					do{
 						$transactionData = [
-							'establishment_id' => $_SESSION['userid'],
+							'establishment_id' => $id,
 							'user_id' => $userData[0],
 							'value' => $value,
 							'date' => date('Y-m-d', strtotime("+ ".$count. "months")),
@@ -223,14 +225,17 @@ function makeSale($data){
 			else{
 				$response['error'] = 'balance_not_enough';
 				$response['balance'] = $balance;
+				$response['message'] = 'Saldo insuficiente';
 			}
 		}
 		else{
 			$response['error'] = 'balance_not_found';
+			$response['message'] = 'Não há saldo cadastrado para este CPF';
 		}
 	}
 	else{
 		$response['error'] = 'bad_password';
+		$response['message'] = "Senha inválida";
 	}
 
 	print(json_encode($response));
