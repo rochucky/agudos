@@ -109,9 +109,6 @@
               "select": true
             });
 
-            $('tr td span[name="transactions.value"]').each(function(){
-              $(this).html("R$ " + $(this).html().replace('.',','));
-            });
 
             $('tr').off('dblclick');
 

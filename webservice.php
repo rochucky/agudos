@@ -208,7 +208,7 @@ function makeSale($data){
 							'establishment_id' => $id,
 							'user_id' => $userData[0],
 							'value' => $value,
-							'date' => date('Y-m-d', strtotime("+ ".$count. "months")),
+							'date' => ($count == 0) ? date('Y-m-d H:i:s', strtotime("+ ".$count. "months")) : date('Y-m-01', strtotime("+ ".$count. "months")),
 							'comments' => ($count+1).'/'.$data->installments,
 							'status' => 1,
 							'code' => $code
