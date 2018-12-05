@@ -203,7 +203,7 @@ function getBalanceData($data){
 				'transactions' => array('value', 'comments', 'status', 'date'),
 				'establishments' => array('name')
 			),  // Campos
-			array('user_id' => $userid, 'status' => 1, 'date[>=]' => date('Y-m-01'), 'ORDER' => array('date' => 'ASC') ),  // Where
+			array('user_id' => $userid, 'status' => 1, 'date[>=]' => date('Y-m-01'), 'ORDER' => array('date' => 'DESC') ),  // Where
 			array('[>]establishments' => array('transactions.establishment_id' => 'id'))); // Join
 	
 	$currentDebt = 0;
