@@ -322,7 +322,8 @@ function getEstablishmentTransactions($data){
 				'value' => $val['transactions']['value'],
 				'type' => $val['transactions']['comments'],
 				'status' => ($val['transactions']['status'] == 1) ? '' : 'Cancelada',
-				'cancelButton' => ($val['transactions']['status'] == 1) ? '' : 'hide'
+				'cancelButton' => ($val['transactions']['status'] == 1) ? '' : 'hide',
+				'visibility' => ($val['transactions']['date'] <= date('Y-m-d', strtotime('tomorrow'))) ? '' : 'hide'
 			);
 		}
 	}
