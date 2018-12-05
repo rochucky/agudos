@@ -100,7 +100,7 @@ function saveData($data){
 	if($data->filter != ''){
 		$conditions = parseConditions($data->filter);
 		foreach($conditions as $condition_key => $condition_val){
-			$_data->filter = $conditions;
+			$_data->$condition_key = $condition_val;
 		}
 	}
 	else{
