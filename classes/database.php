@@ -6,10 +6,8 @@ use Medoo\Medoo;
 
 class Database{
 
-	
-
-	public function __construct($table){
-		$this->conn = new Medoo([
+	private static function connect(){
+		$conn = new Medoo([
 		    'database_type' => 'mysql',
 		    'database_name' => 'agudos',
 		    'server' => 'localhost',
@@ -17,8 +15,18 @@ class Database{
 		    'password' => 'eucs1234'
 		]);
 
-		$this->table = $table;
+		return $conn;
 	}
+	
+
+	public function __construct($table){
+		
+		$this->conn = $this->connect();
+		$this->table = $table;
+		
+	}
+
+	
 
 	public function getData($fields, $conditions = null, $joins = null, $debug = false){
 		if($joins != ''){
@@ -103,6 +111,17 @@ class Database{
 		$return = $this->conn->delete($this->table, array('id' => $id));
 
 		return $return->errorInfo();
+	}
+
+	public static function query($query,$params,$debug = false){
+		$connection = Database::connect();
+		if($debug){
+			echo "DEBUG: ";
+			echo $connection->debug()->query($query,$params);
+			die();
+		}
+		return $connection->query($query,$params)->fetchAll();
+		
 	}
 
 }

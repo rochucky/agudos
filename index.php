@@ -104,7 +104,7 @@ if(!isset($_SESSION['sessid'])){
             </a>
             <div class="dropdown-menu" aria-labelledby="pagesDropdown">
               <a class="dropdown-item menu-item" data-module="financeiro/transacoes" href="">Transações</a>
-              <a class="dropdown-item menu-item" data-module="financeiro/relatorios" href="">Relatórios</a>
+              <a class="dropdown-item menu-item" data-module="financeiro/relatorios" data-modtype="custom" href="">Relatórios</a>
             </div>
           </li> 
 

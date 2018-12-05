@@ -240,6 +240,51 @@ function makeSale($data){
 
 	print(json_encode($response));
 
+
 }
+
+function generateReport($data){
+	
+	$transactions = Database::query("
+		select
+			users.name, 
+			sum(transactions.value) 
+		from
+			transactions
+		left join 
+			users on users.id = transactions.user_id
+		where
+			transactions.date between :first and :last
+			and transactions.status = 1
+		group by
+			users.name",
+			[
+				':first' => date($data->first),
+				':last' => date($data->last)
+			]);
+
+	if($data->type == 'users'){
+		// $tableData = $transactionsTable->getData(
+		// 	array(
+		// 		'users' => array('name'),
+		// 		'transactions' => array('value')
+		// 	),
+		// 	array(
+		// 		'date[>=]' => date($data->first),
+		// 		'date[<=]' => date($data->last),
+		// 		'status' => 1
+		// 	),
+		// 	array(
+		// 		'[>]users' => array('transactions.user_id' => 'id')
+		// 	)
+		// );
+
+
+		print_r($transactions);
+		
+	}
+}
+
+
 
 ?>
