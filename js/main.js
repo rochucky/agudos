@@ -95,6 +95,45 @@
                 }
               }
               
+              $('#dataTable tbody tr').dblclick(function(){
+
+                var data = {
+                  "table": table,
+                  "filter": filter,
+                  "id": this.id,
+                  "method": "getRecord"
+                };
+                data = JSON.stringify(data);
+
+                $.ajax({
+                  url: 'webservice.php',
+                  method: 'POST',
+                  datatype: 'json',
+                  data: {data: data},
+                  success: function(record){
+                    if(record == 'session_error'){
+                      location.reload();
+                    }
+                    // console.log(record);
+                    record = JSON.parse(record);
+                    for(i in record){
+                      var value = record[i]
+                      i = i.replace(/_/g, "-");
+                      $('input[name='+i+']').val(value);
+                      
+                      if($('select[name='+i+']').val() != undefined){
+                        value = (value == null) ? 0 : value;
+                        $('select[name='+i+']').children('option[value=' + value + ']').attr('selected', true);
+                      }
+                    }
+                    $('.table-form-delete').show();
+                    $('.tab-container').toggle();
+                    $('.menu-btn-new, .menu-btn-back, .menu-btn').toggle();
+                  }
+                });
+                
+              });
+
               var datatable = $('#dataTable').DataTable({
                 "language": {
                   "search": "Buscar: ",
@@ -141,44 +180,7 @@
 
               });
 
-              $('#dataTable tbody tr').dblclick(function(){
-
-                var data = {
-                  "table": table,
-                  "filter": filter,
-                  "id": this.id,
-                  "method": "getRecord"
-                };
-                data = JSON.stringify(data);
-
-                $.ajax({
-                  url: 'webservice.php',
-                  method: 'POST',
-                  datatype: 'json',
-                  data: {data: data},
-                  success: function(record){
-                    if(record == 'session_error'){
-                      location.reload();
-                    }
-                    // console.log(record);
-                    record = JSON.parse(record);
-                    for(i in record){
-                      var value = record[i]
-                      i = i.replace(/_/g, "-");
-                      $('input[name='+i+']').val(value);
-                      
-                      if($('select[name='+i+']').val() != undefined){
-                        value = (value == null) ? 0 : value;
-                        $('select[name='+i+']').children('option[value=' + value + ']').attr('selected', true);
-                      }
-                    }
-                    $('.table-form-delete').show();
-                    $('.tab-container').toggle();
-                    $('.menu-btn-new, .menu-btn-back, .menu-btn').toggle();
-                  }
-                });
-                
-              });
+              
               if(typeof afterLoad == 'function'){
                 afterLoad(datatable);
               }

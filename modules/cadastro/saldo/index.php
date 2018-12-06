@@ -68,6 +68,7 @@
         <script>
           var afterLoad = function(datatable){
             
+            datatable.destroy();
             var types = {
               1: "À Vista",
               2: "Parcelado",
@@ -77,7 +78,7 @@
               $(this).html(types[$(this).html()]);
             });
 
-            datatable.destroy()
+            
             $('#dataTable').DataTable({
                 "language": {
                   "search": "Buscar: ",
