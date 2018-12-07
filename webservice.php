@@ -80,7 +80,7 @@ function getRecord($data){
 	if($results == null){
 		print_r(json_encode(array(
 			'error' => true,
-			'message' => 'Não encontramos usuário vinculado a este CPF'
+			'message' => 'Usuário não encontrado'
 		)));
 		return false;
 	}
@@ -155,7 +155,7 @@ function makeSale($data){
 	$id = ($data->source == 'mobile') ? $data->id : $_SESSION['userid'];
 
 	$userConditions = [
-		'username' => $data->cpf,
+		'code' => $data->code,
 		'password' => hashPassword($data->password)
 	];
 	$response = [];
