@@ -36,13 +36,13 @@
                         </select> 
                       </div>
                       <div class="form-group first">
-                        <label for="cpf">CPF</label>
-                        <input type="number" class="form-control" name="cpf" /> 
+                        <label for="code">Nº Cartão</label>
+                        <input type="number" class="form-control" name="code" /> 
                       </div>
                       
                       <div class="form-group second">
                         <label for="password">Nome: <span class="name"></span></label><br>
-                        <label for="password">CPF: <span class="cpf"></span></label><br>
+                        <label for="password">Nº Cartão: <span class="code"></span></label><br>
                         <label for="password">Valor: R$ <span class="value"></span></label>
                         <input type="password" class="form-control" name="password" placeholder="Senha" /> 
                       </div>
@@ -67,7 +67,7 @@
 
         <script>
           
-          var cpf;
+          var code;
           var value;
           var installments;
           var screen = 1;
@@ -79,12 +79,12 @@
             event.preventDefault(); 
 
             value = $('input[name=value]').val();
-            cpf = $('input[name=cpf]').val();
+            code = $('input[name=code]').val();
             installments = $('select[name=installments]').val();
 
             var userData = {
               "table": "users",
-              "filter": 'cpf|'+cpf,
+              "filter": 'code|'+code,
               "id": '',
               "method": "getRecord"
             };
@@ -97,7 +97,7 @@
                   data: {data: userData},
                   success: function(record){
                     if(record == ''){
-                      notification('Cpf inválido', 'error');
+                      notification('Matriicula inválida', 'error');
                     }
                     else{
                       record = JSON.parse(record);
@@ -110,7 +110,7 @@
                           $('span.value').html(value);
                         }
                         $('span.name').html(record.name);
-                        $('span.cpf').html(record.cpf);
+                        $('span.code').html(record.code);
                         
                         $('.form-group.second').fadeIn('fast');
                         screen = 2;
@@ -138,7 +138,7 @@
             event.preventDefault()
             $('.form-group.second').fadeOut('fast', function() {
               $('span.name').html('');
-              $('span.cpf').html('');
+              $('span.code').html('');
               $('span.value').html('');
               $('input[name=password]').val('');
               $('.form-group.first').fadeIn('fast');
