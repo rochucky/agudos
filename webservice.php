@@ -208,7 +208,7 @@ function makeSale($data){
 							'establishment_id' => $id,
 							'user_id' => $userData[0],
 							'value' => $value,
-							'date' => ($count == 0) ? date('Y-m-d H:i:s', strtotime("+ ".$count. "months")) : date('Y-m-01', strtotime("+ ".$count. "months")),
+							'date' => ($count == 0) ? date('Y-m-d H:i:s', strtotime("+ ".$count. "months")) : date('Y-m-21', strtotime("+ ".$count. "months")),
 							'comments' => ($count+1).'/'.$data->installments,
 							'status' => 1,
 							'code' => $code
@@ -219,6 +219,7 @@ function makeSale($data){
 						$count++;
 					}
 					while($count < $data->installments);
+					$response['error'] = '';
 					$response['message'] = 'Pagamento efetuado<br>Criadas '.$count.' parcelas de R$ '.number_format($value,2,",",".").' cada.';
 				}
 			}
