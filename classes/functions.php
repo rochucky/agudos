@@ -198,6 +198,20 @@ function changePassword($data){
 	print(json_encode($result));
 }
 
+function getPeriod(){
+	if(date('d') > 20){
+		$dates['first'] = date('Y-m-21');
+		$dates['last'] = date('Y-m-20', strtotime('+ 1 month'));
+	}
+	else{
+		$dates['first'] = date('Y-m-21', strtotime('- 1 month'));
+		$dates['last'] = date('Y-m-20');
+	}
+	return $dates;
+	
+}
+
+
 function getBalanceData($data){
 
 	$userid = $data->data->userid;
@@ -215,12 +229,14 @@ function getBalanceData($data){
 		}
 	}
 
+	$dates = getPeriod();
+
 	$transactionData = $transactionTable->getData(
 			array(
 				'transactions' => array('value', 'comments', 'status', 'date'),
 				'establishments' => array('name')
 			),  // Campos
-			array('user_id' => $userid, 'status' => 1, 'date[>=]' => date('Y-m-01'), 'ORDER' => array('date' => 'DESC') ),  // Where
+			array('user_id' => $userid, 'status' => 1, 'date[>=]' => $dates['first'], 'ORDER' => array('date' => 'DESC') ),  // Where
 			array('[>]establishments' => array('transactions.establishment_id' => 'id'))); // Join
 	
 	$currentDebt = 0;
@@ -282,11 +298,13 @@ function getUserTransactions($data){
 
 	$transactionsTable = new Database('transactions');
 
+	$dates = getPeriod();
+
 	$transactionsData = $transactionsTable->getData(
 		array(
 			'transactions' => array('transactions.code','date','value','comments'),
 			'establishments' => array('name')),
-		array('transactions.user_id' => $userid, 'transactions.status' => 1, 'date[>=]' => date('Y-m-01'), 'ORDER' => array('transactions.date' => 'DESC')),
+		array('transactions.user_id' => $userid, 'transactions.status' => 1, 'date[>=]' => $dates['first'], 'ORDER' => array('transactions.date' => 'DESC')),
 		array('[>]establishments' => array('transactions.establishment_id' => 'id'))
 	);
 	
@@ -317,11 +335,13 @@ function getEstablishmentTransactions($data){
 
 	$transactionsTable = new Database('transactions');
 
+	$dates = getPeriod();
+
 	$transactionsData = $transactionsTable->getData(
 		array(
 			'transactions' => array('transactions.code','date','value','comments','status'),
 			'users' => array('name')),
-		array('transactions.establishment_id' => $userid, 'date[>=]' => date('Y-m-01'), 'ORDER' => array('transactions.date' => 'DESC')),
+		array('transactions.establishment_id' => $userid, 'date[>=]' => $dates['first'], 'ORDER' => array('transactions.date' => 'DESC')),
 		array('[>]users' => array('transactions.user_id' => 'id'))
 	);
 
