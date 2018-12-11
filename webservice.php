@@ -245,44 +245,77 @@ function makeSale($data){
 
 function generateReport($data){
 	
-	$transactions = Database::query("
-		select
-			users.name, 
-			sum(transactions.value) 
-		from
-			transactions
-		left join 
-			users on users.id = transactions.user_id
-		where
-			transactions.date between :first and :last
-			and transactions.status = 1
-		group by
-			users.name",
-			[
-				':first' => date($data->first),
-				':last' => date($data->last)
-			]);
+	$dateStart = $data->year.'-'.($data->month - 1).'-21';
+	$dateEnd = $data->year.'-'.$data->month.'-20 23:59:59';
 
+	
 	if($data->type == 'users'){
-		// $tableData = $transactionsTable->getData(
-		// 	array(
-		// 		'users' => array('name'),
-		// 		'transactions' => array('value')
-		// 	),
-		// 	array(
-		// 		'date[>=]' => date($data->first),
-		// 		'date[<=]' => date($data->last),
-		// 		'status' => 1
-		// 	),
-		// 	array(
-		// 		'[>]users' => array('transactions.user_id' => 'id')
-		// 	)
-		// );
-
-
-		print_r($transactions);
+		$transactions = Database::query("
+			select
+				users.code as Matricula,
+				users.name as Nome, 
+				users.cpf as Cpf,
+				'PADRAO' as Area,
+				'07/".date('m/Y', strtotime($dateEnd." + 1 month"))."' as 'Data de Vencimento', 
+				sum(transactions.value) as Valor
+			from
+				transactions
+			left join 
+				users on users.id = transactions.user_id
+			where
+				transactions.date between :first and :last
+				and transactions.status = 1
+			group by
+				users.name,
+				users.code,
+				users.cpf",
+				[
+					':first' => $dateStart,
+					':last' => $dateEnd
+				]
+			);
 		
 	}
+
+	if(count($transactions) > 0){
+		try{
+			$filepath = 'files/'.$_SESSION['userid'].'/'.$data->type.'_'.date('dmY').'.csv';
+			$dirname = dirname($filepath);
+			if (!is_dir($dirname))
+			{
+			    mkdir($dirname, 0755, true);
+			}
+
+			$file = fopen($filepath, 'w');
+			$header = true;
+			foreach($transactions as $transaction){
+				if($header){
+					fputcsv($file, array_keys($transaction));
+					$header = false;	
+				}
+				fputcsv($file, $transaction);
+			}
+
+			fclose($file);
+
+			$response['error'] = false;
+			$response['file'] = $filepath;
+			$response['message'] = "Arquivo gerado com sucesso";
+			print_r(json_encode($response));
+			
+		}
+		catch(Throwable $err){
+			$response['error'] = false;
+			$response['message'] = "Falha na geração do arquivo, contacte o administrador do sistema.";
+			print_r(json_encode($response));
+		}
+	}
+	else{
+		$response['error'] = true;
+		$response['message'] = 'Não há dados no período indicado.';
+		print_r(json_encode($response));
+	}
+
 }
 
 

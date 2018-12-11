@@ -120,7 +120,7 @@ class Database{
 			echo $connection->debug()->query($query,$params);
 			die();
 		}
-		return $connection->query($query,$params)->fetchAll();
+		return $connection->query($query,$params)->fetchAll(PDO::FETCH_ASSOC);
 		
 	}
 

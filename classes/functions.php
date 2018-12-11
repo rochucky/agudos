@@ -205,7 +205,7 @@ function getPeriod(){
 	}
 	else{
 		$dates['first'] = date('Y-m-21', strtotime('- 1 month'));
-		$dates['last'] = date('Y-m-20');
+		$dates['last'] = date('Y-m-20 23:59:59');
 	}
 	return $dates;
 	

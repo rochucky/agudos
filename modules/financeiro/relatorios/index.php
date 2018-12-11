@@ -76,16 +76,22 @@
             var year = $('select[name=year] option:selected').val();
             var type = $('select[name=type] option:selected').val();
             var formData = {
-              first: year + '-' + month + '-01',
-              last: year + '-' + month + '-t 23:59:59',
+              month: month,
+              year: year,
               type: type,
               method: "generateReport"
             };
 
             formData = JSON.stringify(formData);
             $.post('webservice.php', {data: formData}, function(e){
-              console.log(e);
-              alert('teste');
+              response = JSON.parse(e);
+              if(response.error == true){
+                notification(response.message, 'error');
+              }
+              else{
+                $('label[name=file-container]').html('<a href="'+response.file+'" download>Baixar Arquivo</a>');
+                notification(response.message);
+              }
             });
           });
         </script>
