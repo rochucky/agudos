@@ -278,33 +278,31 @@ function generateReport($data){
 	}
 
 	if(count($transactions) > 0){
-		try{
-			$filepath = 'files/'.$_SESSION['userid'].'/'.$data->type.'_'.date('dmY').'.csv';
-			$dirname = dirname($filepath);
-			if (!is_dir($dirname))
-			{
-			    mkdir($dirname, 0755, true);
+		
+		$filepath = 'files/'.$_SESSION['userid'].'/'.$data->type.'_'.date('dmY').'.csv';
+		$dirname = dirname($filepath);
+		if (!is_dir($dirname))
+		{
+		    mkdir($dirname, 0755, true);
+		}
+
+		$file = fopen($filepath, 'w');
+		$header = true;
+		foreach($transactions as $transaction){
+			if($header){
+				fputcsv($file, array_keys($transaction));
+				$header = false;	
 			}
+			fputcsv($file, $transaction);
+		}
 
-			$file = fopen($filepath, 'w');
-			$header = true;
-			foreach($transactions as $transaction){
-				if($header){
-					fputcsv($file, array_keys($transaction));
-					$header = false;	
-				}
-				fputcsv($file, $transaction);
-			}
-
-			fclose($file);
-
+		if(fclose($file)){
 			$response['error'] = false;
 			$response['file'] = $filepath;
 			$response['message'] = "Arquivo gerado com sucesso";
 			print_r(json_encode($response));
-			
 		}
-		catch(Throwable $err){
+		else{
 			$response['error'] = false;
 			$response['message'] = "Falha na geração do arquivo, contacte o administrador do sistema.";
 			print_r(json_encode($response));
