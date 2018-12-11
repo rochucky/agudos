@@ -156,14 +156,22 @@ function changePassword($data){
 	if($data->data->oldPassword){
 		if($_SESSION['usertype'] == 'estabelecimento'){
 			$usersTable = new Database('establishments');
+			$usersData = $usersTable->getData(array('password'), array('id' => $_SESSION['userid']), '');
 		}
 		else{
 			$usersTable = new Database('users');
+			$usersData = $usersTable->getData(array('password','user_type_id'), array('id' => $_SESSION['userid']), '');
 		}
 		
-		$usersData = $usersTable->getData(array('password'), array('id' => $_SESSION['userid']), '');
-		
 		foreach($usersData as $user){
+			if($_SESSION['usertype'] != 'estabelecimento'){
+				if(!ctype_digit(strval($data->data->password)) && $user['user_type_id'] == 5){
+					$result['error'] = true;
+					$result['message'] = 'A senha deve ser numérica';
+					print_r(json_encode($result));
+					die();
+				}
+			}
 			if(hashPassword($data->data->oldPassword) != $user['password']){
 				$result['error'] = true;
 				$result['message'] = 'Senha incorreta';
@@ -175,8 +183,15 @@ function changePassword($data){
 	}
 	else{
 		$usersTable = new Database($data->table);
-		$updData = array('password' => hashPassword($data->data->password));
-		$result = $usersTable->updateData($updData, $data->id);
+
+		if(!ctype_digit(strval($data->data->password)) && $data->type == 5 && $data->table != 'establishments'){
+			$result['error'] = true;
+			$result['message'] = 'A senha deve ser numérica quando o usuário for do tipo "funcionario"';
+		}
+		else{
+			$updData = array('password' => hashPassword($data->data->password));
+			$result = $usersTable->updateData($updData, $data->id);
+		}
 	}
 
 	

@@ -1,4 +1,4 @@
-      
+    
 
         <div class="container-fluid">
 
@@ -122,6 +122,7 @@
                 var data = {
                   "table": "users",
                   "id": $('input[name=id]').val(),
+                  "type": $('select[name=user-type-id]').val(),
                   "data": {
                     "password": newPassword
                   },
@@ -132,6 +133,10 @@
 
                 $.post('webservice.php', {data: data}, function(e){
                   response = JSON.parse(e);
+                  if(response.error == true){
+                    notification(response.message, 'error');
+                    return false;
+                  }
                   if(response[1] == null){
                     $('#passwordModal').modal('hide');
                     notification('Senha alterada.');
