@@ -254,7 +254,7 @@ function generateReport($data){
 			select
 				users.code as Matricula,
 				users.name as Nome, 
-				users.cpf as Cpf,
+				users.cpf as CPF,
 				'PADRAO' as Area,
 				'07/".date('m/Y', strtotime($dateEnd." + 1 month"))."' as 'Data de Vencimento', 
 				sum(transactions.value) as Valor
@@ -292,6 +292,14 @@ function generateReport($data){
 			if($header){
 				fputcsv($file, array_keys($transaction));
 				$header = false;	
+			}
+			foreach($transaction as $key => $val){
+				if($key == 'CPF'){
+					$transaction[$key] = mask($val, '###.###.###-##');
+				}
+				if($key == 'Valor'){
+					$transaction[$key] = number_format($val,2,",","");
+				}
 			}
 			fputcsv($file, $transaction);
 		}
