@@ -19,6 +19,10 @@
       $('#content-wrapper').fadeOut('fast', function(){
         $('#content-wrapper').html('').html(html);
 
+        if(typeof afterLoad == 'function'){
+          afterLoad();
+        }
+
         $('#content-wrapper').fadeIn('fast');
       });
     });

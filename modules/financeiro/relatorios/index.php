@@ -52,8 +52,20 @@
                   <div class="form-group">
                     <label for="value">Tipo</label>
                     <select class="form-control" name="type" /required>
-                      <option value="establishments" selected>Estabelecimentos</option>
+                      <option value="" selected></option>
+                      <option value="establishments">Estabelecimentos</option>
                       <option value="users">Funcionários</option>
+                      <option value="geral">Geral</option>
+                    </select>
+                  </div>
+                  <div class="form-group establishments-form-group hidden">
+                    <label for="establishments">Estabelecimento</label>
+                    <select class="form-control join" name="establishments" /required>
+                    </select>
+                  </div>
+                  <div class="form-group users-form-group hidden">
+                    <label for="users">Funcionario</label>
+                    <select class="form-control join" name="users" /required>
                     </select>
                   </div>
                   <div class="form-group">
@@ -94,6 +106,22 @@
               }
             });
           });
+
+          afterLoad = function(){
+
+            $('select.join').each(function(e){
+
+              let data = {
+                "table": this.name,
+                "fields": ['name'],
+                "method": "getTableData"
+              };
+              $.post('webservice.php', {data: JSON.stringify(data)}, function(){
+                alert('ok');  
+              })
+              
+            });
+          }
         </script>
 
         <!-- Sticky Footer 

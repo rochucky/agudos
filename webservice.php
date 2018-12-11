@@ -261,8 +261,10 @@ function generateReport($data){
 				sum(transactions.value) as Valor
 			from
 				transactions
-			left join 
+			inner join 
 				users on users.id = transactions.user_id
+			inner join
+				establishments on establishments.id = transactions.establishments_id
 			where
 				transactions.date between :first and :last
 				and transactions.status = 1
