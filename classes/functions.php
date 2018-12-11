@@ -15,9 +15,11 @@ function parseConditions($string){
 	foreach($parse1 as $parse1_val){
 		$parse2 = explode('|', $parse1_val);
 		if(isset($parse2[2])){
+			$parse2[2] = ($parse2[2] == 'userid') ? $_SESSION['userid'] : $parse2[2];
 			$data[str_replace('-', '_', $parse2[0])] = array(str_replace('-', '_', $parse2[1]) => str_replace('-', '_', $parse2[2]));
 		}
 		else{
+			$parse2[1] = ($parse2[1] == 'userid') ? $_SESSION['userid'] : $parse2[1];
 			$data[str_replace('-', '_', $parse2[0])] = $parse2[1];
 		}
 

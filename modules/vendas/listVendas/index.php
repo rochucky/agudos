@@ -20,7 +20,7 @@
             </div>
             <div class="card-body">
               <div class="table-responsive tab-container">
-                <table class="table-bordered table-striped table-hover" id="dataTable" data-table="transactions" data-join="[><]users|user-id|id" data-filters=""  width="100%" cellspacing="0">
+                <table class="table-bordered table-striped table-hover" id="dataTable" data-table="transactions" data-join="[><]users|user-id|id" data-filters="establishment-id|userid"  width="100%" cellspacing="0">
                   <thead>
                     <tr>
                       <th data-field="transactions.code">Código</th>
