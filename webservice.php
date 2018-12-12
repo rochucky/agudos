@@ -256,22 +256,89 @@ function generateReport($data){
 				users.code as Matricula,
 				users.name as Nome, 
 				users.cpf as CPF,
-				'PADRAO' as Area,
-				'07/".date('m/Y', strtotime($dateEnd." + 1 month"))."' as 'Data de Vencimento', 
+				establishments.name as Estabelecimento,
 				sum(transactions.value) as Valor
 			from
 				transactions
 			inner join 
 				users on users.id = transactions.user_id
 			inner join
-				establishments on establishments.id = transactions.establishments_id
+				establishments on establishments.id = transactions.establishment_id
+			where
+				transactions.date between :first and :last
+				and transactions.status = 1
+				and establishments.id = :param
+			group by
+				users.name,
+				users.code,
+				users.cpf,
+				establishments.name",
+				[
+					':first' => $dateStart,
+					':last' => $dateEnd,
+					':param' => $data->param
+				]
+			);
+		
+	}
+	elseif($data->type == 'establishments'){
+		$transactions = Database::query("
+			select
+				establishments.code as Matricula,
+				establishments.name as Nome, 
+				establishments.cnpj as CNPJ,
+				users.name as Funcionario,
+				sum(transactions.value) as Valor
+			from
+				transactions
+			inner join 
+				users on users.id = transactions.user_id
+			inner join
+				establishments on establishments.id = transactions.establishment_id
+			where
+				transactions.date between :first and :last
+				and transactions.status = 1
+				and users.id = :param
+			group by
+				establishments.name,
+				establishments.code,
+				establishments.cnpj,
+				users.name",
+				[
+					':first' => $dateStart,
+					':last' => $dateEnd,
+					':param' => $data->param
+				]
+			);
+		
+	}
+	elseif($data->type == 'geral'){
+		$transactions = Database::query("
+			select
+				establishments.code as 'Matricula do Estabelecimento',
+				establishments.name as 'Nome do Estabelecimento',
+				establishments.cnpj as CNPJ,
+				users.code as 'Matrícula do Funcionario',
+				users.name as 'Nome do Funcionario',
+				users.cpf as CPF,
+				sum(transactions.value) as Valor
+			from
+				transactions
+			inner join 
+				users on users.id = transactions.user_id
+			inner join
+				establishments on establishments.id = transactions.establishment_id
 			where
 				transactions.date between :first and :last
 				and transactions.status = 1
 			group by
+				establishments.name,
+				establishments.code,
+				establishments.cnpj,
 				users.name,
 				users.code,
-				users.cpf",
+				users.cpf
+				",
 				[
 					':first' => $dateStart,
 					':last' => $dateEnd
@@ -291,20 +358,37 @@ function generateReport($data){
 
 		$file = fopen($filepath, 'w');
 		$header = true;
+		$total = 0;
 		foreach($transactions as $transaction){
-			if($header){
-				fputcsv($file, array_keys($transaction));
-				$header = false;	
-			}
 			foreach($transaction as $key => $val){
 				if($key == 'CPF'){
 					$transaction[$key] = mask($val, '###.###.###-##');
 				}
+				if($key == 'CNPJ'){
+					$transaction[$key] = mask($val, '##.###.###/####-##');
+				}
 				if($key == 'Valor'){
+					$total += $transaction[$key];
 					$transaction[$key] = number_format($val,2,",","");
 				}
+				if($key == 'Funcionario'){
+					$name = $transaction[$key];
+					unset($transaction[$key]);
+				}
+				if($key == 'Estabelecimento'){
+					$name = $transaction[$key];
+					unset($transaction[$key]);
+				}
+			}
+			if($header){
+				fputcsv($file, array_keys($transaction));
+				$header = false;	
 			}
 			fputcsv($file, $transaction);
+		}
+		if($data->type != 'geral'){
+			fputcsv($file, array(''));
+			fputcsv($file, array('',$name,'',number_format($total,2,",","")));
 		}
 
 		if(fclose($file)){
@@ -314,7 +398,7 @@ function generateReport($data){
 			print_r(json_encode($response));
 		}
 		else{
-			$response['error'] = false;
+			$response['error'] = true;
 			$response['message'] = "Falha na geração do arquivo, contacte o administrador do sistema.";
 			print_r(json_encode($response));
 		}

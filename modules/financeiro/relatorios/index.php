@@ -1,4 +1,4 @@
-      
+
 
         <div class="container-fluid">
 
@@ -50,7 +50,7 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="value">Tipo</label>
+                    <label for="type">Tipo</label>
                     <select class="form-control" name="type" /required>
                       <option value="" selected></option>
                       <option value="establishments">Estabelecimentos</option>
@@ -87,10 +87,17 @@
             var month = $('select[name=month] option:selected').val();
             var year = $('select[name=year] option:selected').val();
             var type = $('select[name=type] option:selected').val();
+            if(type == 'users'){
+              var param = $('select[name=establishments] option:selected').val();
+            }
+            if(type == 'establishments'){
+              var param = $('select[name=users] option:selected').val();
+            }
             var formData = {
               month: month,
               year: year,
               type: type,
+              param: param,
               method: "generateReport"
             };
 
@@ -109,15 +116,46 @@
 
           afterLoad = function(){
 
+            $('select[name=type]').change(function(e){
+              let type = $(this).children('option:selected').val();
+              if(type == 'establishments'){
+                $('.users-form-group').removeClass('hidden');
+                $('.establishments-form-group').addClass('hidden');
+              }
+              else if(type == 'users'){
+                $('.users-form-group').addClass('hidden');
+                $('.establishments-form-group').removeClass('hidden');
+              }
+              else{
+                $('.users-form-group').addClass('hidden');
+                $('.establishments-form-group').addClass('hidden');
+              }
+            });
+
             $('select.join').each(function(e){
 
+              let jqThat = $(this);
+              let that = this;
               let data = {
                 "table": this.name,
                 "fields": ['name'],
+                "filter": 'ORDER|name',
                 "method": "getTableData"
               };
-              $.post('webservice.php', {data: JSON.stringify(data)}, function(){
-                alert('ok');  
+              $.post('webservice.php', {data: JSON.stringify(data)}, function(response){
+                response = JSON.parse(response);
+                for(i in response){
+                  if(that.name == 'users'){
+                    let userData = JSON.parse(response[i]);
+                    let option = '<option value="'+userData.id+'">'+userData.users.name+'</option>';
+                    jqThat.append(option);
+                  }
+                  if(that.name == 'establishments'){
+                    let userData = JSON.parse(response[i]);
+                    let option = '<option value="'+userData.id+'">'+userData.establishments.name+'</option>';
+                    jqThat.append(option);
+                  }
+                }
               })
               
             });
