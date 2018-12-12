@@ -155,7 +155,7 @@ function makeSale($data){
 	$id = ($data->source == 'mobile') ? $data->id : $_SESSION['userid'];
 
 	$userConditions = [
-		'code' => $data->code,
+		'cpf' => $data->code,
 		'password' => hashPassword($data->password)
 	];
 	$response = [];
