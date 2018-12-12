@@ -3,6 +3,9 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST, GET,  OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
+date_default_timezone_set('America/Sao_Paulo');
+
+
 include('classes/functions.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -100,7 +103,7 @@ function saveData($data){
 	if($data->filter != ''){
 		$conditions = parseConditions($data->filter);
 		foreach($conditions as $condition_key => $condition_val){
-			$_data->$condition_key = $condition_val;
+			$_data->filter = array($condition_key => $condition_val);
 		}
 	}
 	else{
@@ -120,7 +123,7 @@ function saveData($data){
 	unset($_data->id);
 
 	$_data = (array)$_data;
-		
+
 	if($id == ''){
 		if(isset($_data['password'])){
 			$_data['password'] = hashPassword($_data['password']);
