@@ -84,7 +84,7 @@
 
             var userData = {
               "table": "users",
-              "filter": 'code|'+code,
+              "filter": 'cpf|'+code,
               "id": '',
               "method": "getRecord"
             };
@@ -110,7 +110,7 @@
                           $('span.value').html(value);
                         }
                         $('span.name').html(record.name);
-                        $('span.code').html(record.code);
+                        $('span.code').html(record.cpf);
                         
                         $('.form-group.second').fadeIn('fast');
                         screen = 2;
