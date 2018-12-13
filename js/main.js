@@ -14,15 +14,20 @@
       break;
   }
 
+  
+
   var loadCustomMod = function(modules){
     $.get('modules/'+modules+'/index.php', function(html){
       $('#content-wrapper').fadeOut('fast', function(){
+        var l = new loading();
+        l.show();
         $('#content-wrapper').html('').html(html);
 
         if(typeof afterLoad == 'function'){
           afterLoad();
         }
 
+        l.hide();
         $('#content-wrapper').fadeIn('fast');
       });
     });
@@ -35,8 +40,11 @@
 
   var loadModule = function(modules){
 
+    
     $.get('modules/'+modules+'/index.php', function(html){
         $('#content-wrapper').fadeOut('fast', function(){
+          
+
           $('#content-wrapper').html('').html(html);
           
           /* Table Stuff */
@@ -62,13 +70,17 @@
             };
 
             data = JSON.stringify(data);            
-
+            var l = new loading();
             $.ajax({
               url: 'webservice.php',
               method: 'POST',
               datatype: 'json',
-              data: {data: data}
+              data: {data: data},
+              beforeSend: function(){
+                l.show();
+              }
             }).done(function(e){
+              l.hide();
               if(e == 'session_error'){
                 location.reload();
                 // $('#sessionModal').modal('show');
@@ -188,6 +200,7 @@
               if(typeof afterLoad == 'function'){
                 afterLoad(datatable);
               }
+              
               $('#content-wrapper').fadeIn('fast');
             });
 
@@ -250,7 +263,7 @@
                 }
               });
 
-            })
+            });
 
             /*
               Salvando Registro.
@@ -314,13 +327,14 @@
           });
           
 
-
+          
           
 
         });
         
         
     });
+    
     return false;
   
   }
