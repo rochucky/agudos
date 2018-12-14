@@ -65,8 +65,15 @@ if(isset($_SESSION['sessid'])){
 
     <div class="container">
       <div class="card card-login mx-auto mt-5">
-        <div class="card-header">Login</div>
+        
         <div class="card-body">
+          <div class="row text-center" >
+            <div class="col">
+            
+              <br><img src="images/logo.png" style="height: 100px; width: 100px"><br><br><br>
+              
+            </div>
+          </div>
           <form method="POST" action="login.php">
             <div class="row">
               <div class="col-md-12 text-center error-text">
@@ -95,9 +102,6 @@ if(isset($_SESSION['sessid'])){
             </div>
             <button type="submit" class="btn btn-primary form-control">Entrar</button><br><br>
           </form>
-          <div class="text-center">
-            <a class="d-block small" href="forgot-password.html">Esqueceu a senha?</a>
-          </div>
         </div>
       </div>
     </div>
