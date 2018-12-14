@@ -128,6 +128,12 @@ function saveData($data){
 		if(isset($_data['password'])){
 			$_data['password'] = hashPassword($_data['password']);
 		}
+		if(isset($_data['filter'])){ // O filtro só serve para o update
+			foreach($_data['filter'] as $key => $val){
+				$_data[$key] = $val;
+			}
+			unset($_data['filter']);
+		}
 		$response = $table->insertData($_data);
 	}
 	else{
@@ -367,20 +373,23 @@ function generateReport($data){
 				if($key == 'CPF'){
 					$transaction[$key] = mask($val, '###.###.###-##');
 				}
-				if($key == 'CNPJ'){
+				elseif($key == 'CNPJ'){
 					$transaction[$key] = mask($val, '##.###.###/####-##');
 				}
-				if($key == 'Valor'){
+				elseif($key == 'Valor'){
 					$total += $transaction[$key];
 					$transaction[$key] = number_format($val,2,",","");
 				}
-				if($key == 'Funcionario'){
+				elseif($key == 'Funcionario'){
 					$name = $transaction[$key];
 					unset($transaction[$key]);
 				}
-				if($key == 'Estabelecimento'){
+				elseif($key == 'Estabelecimento'){
 					$name = $transaction[$key];
 					unset($transaction[$key]);
+				}
+				else{
+					$transaction[$key] = utf8_decode($transaction[$key]);
 				}
 			}
 			if($header){

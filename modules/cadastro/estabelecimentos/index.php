@@ -163,7 +163,9 @@
             $(this).val($(this).val().replace(/[^\d]+/g,''));
           });
 
-          var afterLoad = function(){
+          var afterLoad = function(datatable){
+
+          	datatable.destroy();
 
             $('tr td span[name="is_active"]').each(function(){
               if($(this).html() == '1'){
@@ -172,7 +174,24 @@
               else{
                 $(this).html('Não');
               }
-            })
+            });
+
+             $('#dataTable').DataTable({
+              "language": {
+                "search": "Buscar: ",
+                "lengthMenu": "Exibir _MENU_ registros por página",
+                "zeroRecords": "Nenhum registro disponível",
+                "info": "Exibindo _TOTAL_ registros",
+                "infoEmpty": "Nenhum registro encontrado",
+                "infoFiltered": "de _MAX_",
+                "paginate": {
+                  "first":      '<<',
+                  "last":       '>>',
+                  "next":       '>',
+                  "previous":   '<'
+                }
+              }
+            });
           }
 
         </script>
