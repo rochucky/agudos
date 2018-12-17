@@ -9,10 +9,10 @@ class Database{
 	private static function connect(){
 		$conn = new Medoo([
 		    'database_type' => 'mysql',
-		    'database_name' => 'agudos',
-		    'server' => 'localhost',
-		    'username' => 'root',
-		    'password' => 'eucs1234'
+		    'database_name' => '',
+		    'server' => '',
+		    'username' => '',
+		    'password' => ''
 		]);
 
 		return $conn;
